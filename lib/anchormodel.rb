@@ -27,6 +27,10 @@ class Anchormodel
     self.class == other.class && key == other.key
   end
 
+  def label
+    I18n.t("#{self.class.name.demodulize}|#{key.to_s.humanize}")
+  end
+
   def inspect
     "#<#{self.class.name}<#{key}>:#{hash}>"
   end
