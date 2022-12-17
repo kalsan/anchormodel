@@ -4,6 +4,7 @@
 class Anchormodel
   attr_reader :key
   attr_reader :index
+
   class_attribute :entries_list, default: [] # For ordering
   class_attribute :entries_hash, default: {} # For quick access
   class_attribute :valid_keys, default: Set.new
@@ -17,7 +18,7 @@ class Anchormodel
   # @param key [String,Symbol] The key of the value that should be retrieved.
   def self.find(key)
     return nil if key.nil?
-    return self.entries_hash[key.to_sym] || fail("Retreived undefined anchor model key #{key.inspect} for #{inspect}.")
+    return entries_hash[key.to_sym] || fail("Retreived undefined anchor model key #{key.inspect} for #{inspect}.")
   end
 
   # Call this initializer directly in your Anchormodel class. To set `@foo=:bar` for anchor `:ter`, use `new(:ter, foo: :bar)`
@@ -25,7 +26,7 @@ class Anchormodel
   # @param attributes All named arguments to Anchormodel are made available as instance attributes.
   def initialize(key, **attributes)
     @key = key.to_sym
-    @index = self.entries_list.count
+    @index = entries_list.count
 
     # Save attributes as instance variables
     attributes.each do |k, v|

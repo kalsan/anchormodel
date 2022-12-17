@@ -13,12 +13,12 @@ module Anchormodel::ModelMixin
     # @param attribute_name [String,Symbol] The name and database column of the attribute
     # @param anchor_class_name [String] Name of the Anchormodel class (omit if attribute `:foo_bar` holds an `Anchormodels::FooBar`)
     # @param optional [Boolean] If true, a presence validation is added to the model.
-    def belongs_to_anchormodel(attribute_name, anchor_class_name=nil, optional: false)
+    def belongs_to_anchormodel(attribute_name, anchor_class_name = nil, optional: false)
       attribute_name = attribute_name.to_sym
       attribute = Anchormodel::Attribute.new(self, attribute_name, anchor_class_name, optional)
 
       # Register attribute
-      self.anchormodel_attributes = anchormodel_attributes.merge({attribute_name => attribute}).freeze
+      self.anchormodel_attributes = anchormodel_attributes.merge({ attribute_name => attribute }).freeze
 
       # Add presence validation if required
       unless optional
