@@ -28,4 +28,8 @@ class Anchormodel::ActiveModelTypeValue < ActiveModel::Type::Value
     return value if value.is_a?(@attribute.anchor_class)
     return @attribute.anchor_class.find(value)
   end
+
+  def changed?(old_value, new_value, _new_value_before_type_cast)
+    return deserialize(old_value) != deserialize(new_value)
+  end
 end
