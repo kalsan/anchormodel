@@ -41,4 +41,5 @@ class Anchormodel
 end
 
 require 'anchormodel/attribute'
+require 'anchormodel/model_mixin'
 require 'anchormodel/version'
