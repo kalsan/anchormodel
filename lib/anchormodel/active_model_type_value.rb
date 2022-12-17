@@ -1,3 +1,4 @@
+# @see https://www.rubydoc.info/docs/rails/ActiveModel/Type/Value
 class Anchormodel::ActiveModelTypeValue < ActiveModel::Type::Value
   def initialize(attribute)
     @attribute = attribute

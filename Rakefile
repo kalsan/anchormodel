@@ -14,6 +14,9 @@ task :gemspec do
 
     # Dependencies
     s.add_runtime_dependency 'rails', '>= 7.0'
+
+    s.add_development_dependency 'yard', '>= 0.9.28'
+    s.add_development_dependency 'yard-activesupport-concern'
   end
 
   File.open('anchormodel.gemspec', 'w') do |f|

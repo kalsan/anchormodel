@@ -23,7 +23,11 @@ Gem::Specification.new do |s|
 
   if s.respond_to? :add_runtime_dependency then
     s.add_runtime_dependency(%q<rails>.freeze, [">= 7.0"])
+    s.add_development_dependency(%q<yard>.freeze, [">= 0.9.28"])
+    s.add_development_dependency(%q<yard-activesupport-concern>.freeze, [">= 0"])
   else
     s.add_dependency(%q<rails>.freeze, [">= 7.0"])
+    s.add_dependency(%q<yard>.freeze, [">= 0.9.28"])
+    s.add_dependency(%q<yard-activesupport-concern>.freeze, [">= 0"])
   end
 end

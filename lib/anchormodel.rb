@@ -1,3 +1,6 @@
+# @api description
+# Inherit from this class and place your Anchormodel under `app/anchormodels/your_anchor_model.rb`. Use it like `Anchormodels::YourAnchorModel`.
+# Refer to the README for usage.
 class Anchormodel
   attr_reader :key
   attr_reader :index
@@ -5,16 +8,21 @@ class Anchormodel
   class_attribute :entries_hash, default: {} # For quick access
   class_attribute :valid_keys, default: Set.new
 
+  # Returns all possible values this Anchormodel can take.
   def self.all
     entries_list
   end
 
+  # Retrieves a particular value given the key. Fails if not found.
+  # @param key [String,Symbol] The key of the value that should be retrieved.
   def self.find(key)
     return nil if key.nil?
     return self.entries_hash[key.to_sym] || fail("Retreived undefined anchor model key #{key.inspect} for #{inspect}.")
   end
 
-  # To set @foo=:bar for anchor :ter, use new(:ter, foo: :bar)
+  # Call this initializer directly in your Anchormodel class. To set `@foo=:bar` for anchor `:ter`, use `new(:ter, foo: :bar)`
+  # @param key [String,Symbol] The key under which the entry should be stored.
+  # @param attributes All named arguments to Anchormodel are made available as instance attributes.
   def initialize(key, **attributes)
     @key = key.to_sym
     @index = self.entries_list.count
@@ -36,6 +44,7 @@ class Anchormodel
     self.class == other.class && key == other.key
   end
 
+  # Returns a Rails label that is compatible with the [Rails FastGettext](https://github.com/grosser/gettext_i18n_rails/) gem.
   def label
     I18n.t("#{self.class.name.demodulize}|#{key.to_s.humanize}")
   end
