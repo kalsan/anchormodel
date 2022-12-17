@@ -5,6 +5,15 @@ class Anchormodel
   class_attribute :entries_hash, default: {} # For quick access
   class_attribute :valid_keys, default: Set.new
 
+  def self.all
+    entries_list
+  end
+
+  def self.find(key)
+    return nil if key.nil?
+    return self.entries_hash[key.to_sym] || fail("Retreived undefined anchor model key #{key.inspect} for #{inspect}.")
+  end
+
   # To set @foo=:bar for anchor :ter, use new(:ter, foo: :bar)
   def initialize(key, **attributes)
     @key = key.to_sym
