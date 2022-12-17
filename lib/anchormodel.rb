@@ -26,6 +26,14 @@ class Anchormodel
   def ==(other)
     self.class == other.class && key == other.key
   end
+
+  def inspect
+    "#<#{self.class.name}<#{key}>:#{hash}>"
+  end
+
+  def to_s
+    inspect
+  end
 end
 
 require 'anchormodel/version'
