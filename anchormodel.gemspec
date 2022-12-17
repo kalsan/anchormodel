@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib".freeze]
   s.authors = ["Sandro Kalbermatter".freeze]
   s.date = "2022-12-17"
+  s.files = [".gitignore".freeze, ".ruby-version".freeze, "LICENSE".freeze, "Rakefile".freeze, "anchormodel.gemspec".freeze, "lib/anchormodel.rb".freeze, "lib/anchormodel/active_model_type_value.rb".freeze, "lib/anchormodel/attribute.rb".freeze, "lib/anchormodel/model_mixin.rb".freeze, "lib/anchormodel/version.rb".freeze]
   s.required_ruby_version = Gem::Requirement.new(">= 3.0.0".freeze)
   s.rubygems_version = "3.2.33".freeze
   s.summary = "Bringing object-oriented programming to Rails enums".freeze
