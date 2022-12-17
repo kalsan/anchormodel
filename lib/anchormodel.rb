@@ -22,6 +22,10 @@ class Anchormodel
     # Register valid keys
     valid_keys << key
   end
+
+  def ==(other)
+    self.class == other.class && key == other.key
+  end
 end
 
 require 'anchormodel/version'
