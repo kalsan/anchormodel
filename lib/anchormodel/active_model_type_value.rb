@@ -23,4 +23,9 @@ class Anchormodel::ActiveModelTypeValue < ActiveModel::Type::Value
       fail "Attempt to set #{@attribute.attribute_name} to unsupported type #{value.class}"
     end
   end
+
+  def deserialize(value)
+    return value if value.is_a?(@attribute.anchor_class)
+    return @attribute.anchor_class.find(value)
+  end
 end
