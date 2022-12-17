@@ -36,4 +36,5 @@ class Anchormodel
   end
 end
 
+require 'anchormodel/attribute'
 require 'anchormodel/version'
