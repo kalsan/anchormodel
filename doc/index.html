@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.28
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "README";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'><h1 id="introducing-anchormodel">Introducing Anchormodel</h1>
+
+<p>This gem provides a simple but powerful alternative to <a href="https://api.rubyonrails.org/v7.0/classes/ActiveRecord/Enum.html">Rails
+Enums</a>. In
+contrast to regular Enums, Anchormodels can hold application logic, making them
+ideal for tying code to database objects.</p>
+
+<h1 id="use-case">Use case</h1>
+
+<p>Typically, a Rails application consists of three kinds of state:</p>
+
+<ul>
+<li>The code, which we can consider static within a given version. Code can
+reference to other code, e.g. <code>node.parent = other_node</code>.</li>
+<li>The database contents, which can fluctuate within the bounds of the DB schema.
+Data can reference to other data, ideally via foreign keys.</li>
+<li>A mix of the two, where code needs to be specifically tailored for some kind
+of data. A prominent example of such a mix would for instance be user roles:
+roles must be hardcoded in the code because security logic is tied to them.
+However, as users are assigned to roles in the database, roles also need to be
+persisted in the database. This is where Anchormodel comes into play.</li>
+</ul>
+
+<h2 id="alternatives-coviering-the-same-use-case">Alternatives coviering the same use case</h2>
+
+<h3 id="enum">Enum</h3>
+
+<p>In Rails and other frameworks, the third point in the listing above is typically
+achieved via Enums. Enums map either Integers or Strings to constants and
+therefore provide a link between the DB and the application code.</p>
+
+<p>However, at least in Rails, Enums provide very limited customization options.
+They are basic values that can be used in if-statements. Anchormodels however
+are regular classes and can easily be extended.</p>
+
+<h3 id="activeenum">ActiveEnum</h3>
+
+<p>The gem (ActiveEnum)[<a href="https://github.com/adzap/active_enum">https://github.com/adzap/active_enum</a>] allows to create
+Enum-like classes that can be extended. However it only supports Integer keys. I
+find this unsatisfactory, as debugging with tools like <code>psql</code> or <code>mysql</code> is made
+unnecessarily hard when you only see numbers. Keys for enums should be
+meaningful, making you immediately understand what they stand for.</p>
+
+<p>This is why Anchormodel is strictly relying on String keys corresponding to the
+entries of an Anchormodel.</p>
+
+<h1 id="example">Example</h1>
+
+<p><code>app/anchormodels/role.rb</code>:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Anchormodels</span><span class='op'>::</span><span class='const'>Role</span> <span class='op'>&lt;</span> <span class='const'><span class='object_link'><a href="Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span>
+  <span class='comment'># Expose the attribute privilege_level
+</span>  <span class='id identifier rubyid_attr_reader'>attr_reader</span> <span class='symbol'>:privilege_level</span>
+
+  <span class='comment'># Overload &lt;=&gt; to make user roles comparable based on the privilege level
+</span>  <span class='kw'>def</span> <span class='op'>&lt;=&gt;</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_privilege_level'>privilege_level</span> <span class='op'>&lt;=&gt;</span> <span class='ivar'>@privilege_level</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># Declare all available roles
+</span>  <span class='id identifier rubyid_new'>new</span> <span class='symbol'>:guest</span><span class='comma'>,</span> <span class='label'>privilege_level:</span> <span class='int'>0</span>
+  <span class='id identifier rubyid_new'>new</span> <span class='symbol'>:manager</span><span class='comma'>,</span> <span class='label'>privilege_level:</span> <span class='int'>1</span>
+  <span class='id identifier rubyid_new'>new</span> <span class='symbol'>:admin</span><span class='comma'>,</span> <span class='label'>privilege_level:</span> <span class='int'>2</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p><code>app/models/user.rb</code></p>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># The DB table `users` must have a String column `users.role`
+</span><span class='kw'>class</span> <span class='const'>User</span> <span class='op'>&lt;</span> <span class='const'>ApplicationRecord</span>
+  <span class='id identifier rubyid_belongs_to_anchormodel'>belongs_to_anchormodel</span> <span class='symbol'>:role</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>You may now use the following methods:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># Retrieve all user roles:
+</span><span class='const'>Anchormodels</span><span class='op'>::</span><span class='const'>Role</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span>
+
+<span class='comment'># Retrieve a specific role from the String and find its privilege level
+</span><span class='const'>Anchormodels</span><span class='op'>::</span><span class='const'>Role</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:guest</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_privilege_level'>privilege_level</span>
+
+<span class='comment'># Implement a Rails helper that makes sure users can only edit other users that have a lower privilege level than themselves
+</span><span class='kw'>def</span> <span class='id identifier rubyid_user_can_edit?'>user_can_edit?</span><span class='lparen'>(</span><span class='id identifier rubyid_this_user'>this_user</span><span class='comma'>,</span> <span class='id identifier rubyid_other_user'>other_user</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_this_user'>this_user</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span><span class='period'>.</span><span class='id identifier rubyid_privilege_level'>privilege_level</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_other_user'>other_user</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span><span class='period'>.</span><span class='id identifier rubyid_privilege_level'>privilege_level</span>
+<span class='kw'>end</span>
+
+<span class='comment'># Pretty print a user&#39;s role, e.g. using the Rails FastGettext gem:
+</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>User </span><span class='embexpr_beg'>#{</span><span class='ivar'>@user</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> has role </span><span class='embexpr_beg'>#{</span><span class='ivar'>@user</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span><span class='period'>.</span><span class='id identifier rubyid_label'>label</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+</code></pre>
+
+<h1 id="installation">Installation</h1>
+
+<ol>
+<li>Add gem to Gemfile: <code>gem &#39;anchormodel&#39;</code></li>
+<li>In <code>application_record.rb</code>, add in the class body: <code>include Anchormodel::ModelMixin</code></li>
+</ol>
+</div></div>
+
+      <div id="footer">
+  Generated on Sat Dec 17 12:56:00 2022 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-3.0.4).
+</div>
+
+    </div>
+  </body>
+</html>
