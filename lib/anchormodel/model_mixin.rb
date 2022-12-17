@@ -22,6 +22,16 @@ module Anchormodel::ModelMixin
       # Define serializer/deserializer
       active_model_type_value = Anchormodel::ActiveModelTypeValue.new(attribute)
 
+      # Overwrite reader to force building anchors at every retrieval
+      define_method(attribute_name.to_s) do
+        active_model_type_value.deserialize(read_attribute(attribute_name))
+      end
+
+      # Override writer to fail early when an invalid target value is specified
+      define_method("#{attribute_name}=") do |new_value|
+        write_attribute(attribute_name, active_model_type_value.serialize(new_value))
+      end
+
       # Supply serializer and deserializer
       attribute attribute_name, active_model_type_value
     end

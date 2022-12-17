@@ -1,3 +1,4 @@
+# Instanciated when belongs_to_anchormodel is used
 class Anchormodel::Attribute
   attr_reader :attribute_name
   attr_reader :optional
