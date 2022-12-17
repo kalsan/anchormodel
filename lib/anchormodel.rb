@@ -3,6 +3,7 @@ class Anchormodel
   attr_reader :index
   class_attribute :entries_list, default: [] # For ordering
   class_attribute :entries_hash, default: {} # For quick access
+  class_attribute :valid_keys, default: Set.new
 
   # To set @foo=:bar for anchor :ter, use new(:ter, foo: :bar)
   def initialize(key, **attributes)
@@ -17,6 +18,9 @@ class Anchormodel
     # Register self
     entries_list << self
     entries_hash[key] = self
+
+    # Register valid keys
+    valid_keys << key
   end
 end
 
