@@ -5,9 +5,20 @@ class Anchormodel
   attr_reader :key
   attr_reader :index
 
+  class_attribute :setup_completed, default: false
   class_attribute :entries_list, default: [] # For ordering
   class_attribute :entries_hash, default: {} # For quick access
   class_attribute :valid_keys, default: Set.new
+
+  # When a descendant of Anchormodel is first used, it must overwrite the class_attributes
+  # to prevent cross-class pollution.
+  def self.setup!
+    fail("`setup!` was called twice for Anchormodel subclass #{to_s}.") if setup_completed
+    self.entries_list = entries_list.dup
+    self.entries_hash = entries_hash.dup
+    self.valid_keys = valid_keys.dup
+    self.setup_completed = true
+  end
 
   # Returns all possible values this Anchormodel can take.
   def self.all
@@ -25,6 +36,8 @@ class Anchormodel
   # @param key [String,Symbol] The key under which the entry should be stored.
   # @param attributes All named arguments to Anchormodel are made available as instance attributes.
   def initialize(key, **attributes)
+    self.class.setup! unless self.class.setup_completed
+
     @key = key.to_sym
     @index = entries_list.count
 
