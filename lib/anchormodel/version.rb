@@ -4,7 +4,7 @@ class Anchormodel
     MINOR = 0
     PATCH = 2
 
-    EDGE = true
+    EDGE = false
 
     LABEL = [MAJOR, MINOR, PATCH, EDGE ? 'edge' : nil].compact.join('.')
   end
