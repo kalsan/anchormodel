@@ -11,12 +11,14 @@ task :gemspec do
     s.executables   = []
     s.require_paths = ['lib']
     s.required_ruby_version = '>= 3.0.0'
+    s.license = 'LGPL-3.0-or-later'
+    s.homepage = 'https://github.com/kalsan/anchormodel'
 
     # Dependencies
-    s.add_runtime_dependency 'rails', '>= 7.0'
+    s.add_runtime_dependency 'rails', '~> 7.0'
 
-    s.add_development_dependency 'yard', '>= 0.9.28'
-    s.add_development_dependency 'yard-activesupport-concern'
+    s.add_development_dependency 'yard', '~> 0.9.28'
+    s.add_development_dependency 'yard-activesupport-concern', '~> 0.0.1'
   end
 
   File.open('anchormodel.gemspec', 'w') do |f|
