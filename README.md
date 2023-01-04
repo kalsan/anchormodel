@@ -1,3 +1,5 @@
+<img src="logo.svg" height=250 alt="Anchormodel logo"/>
+
 # Introducing Anchormodel
 
 This gem provides a simple but powerful alternative to [Rails
