@@ -13,7 +13,7 @@ class Anchormodel
   # When a descendant of Anchormodel is first used, it must overwrite the class_attributes
   # to prevent cross-class pollution.
   def self.setup!
-    fail("`setup!` was called twice for Anchormodel subclass #{to_s}.") if setup_completed
+    fail("`setup!` was called twice for Anchormodel subclass #{self}.") if setup_completed
     self.entries_list = entries_list.dup
     self.entries_hash = entries_hash.dup
     self.valid_keys = valid_keys.dup
