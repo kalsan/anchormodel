@@ -17,12 +17,17 @@ task :gemspec do
     # Dependencies
     s.add_runtime_dependency 'rails', '~> 7.0'
 
+    s.add_development_dependency 'rake', '~> 13.0.6'
+    s.add_development_dependency 'pry', '~> 0.14.1'
+
     # Doc
     s.add_development_dependency 'yard', '~> 0.9.28'
     s.add_development_dependency 'yard-activesupport-concern', '~> 0.0.1'
 
     # Test
-    s.add_development_dependency 'rake', '~> 13.0.6'
+    s.add_development_dependency 'minitest', '~> 5.17.0'
+    s.add_development_dependency 'minitest-reporters', '~> 1.5.0'
+    s.add_development_dependency 'sqlite3', '~> 1.6.0'
   end
 
   File.open('anchormodel.gemspec', 'w') do |f|
