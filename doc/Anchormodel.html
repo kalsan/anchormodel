@@ -103,8 +103,8 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    <p>Inherit from this class and place your Anchormodel under <code>app/anchormodels/your_anchor_model.rb</code>. Use it like <code>Anchormodels::YourAnchorModel</code>.
-Refer to the README for usage.</p>
+    
+<p>Inherit from this class and place your Anchormodel under <code>app/anchormodels/your_anchor_model.rb</code>. Use it like <code>YourAnchorModel</code>. Refer to the README for usage.</p>
 
 
   </div>
@@ -215,7 +215,8 @@ Refer to the README for usage.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'><p>Returns all possible values this Anchormodel can take.</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns all possible values this Anchormodel can take.</p>
 </div></span>
   
 </li>
@@ -238,7 +239,32 @@ Refer to the README for usage.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'><p>Retrieves a particular value given the key.</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Retrieves a particular value given the key.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#setup!-class_method" title="setup! (class method)">.<strong>setup!</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>When a descendant of Anchormodel is first used, it must overwrite the class_attributes to prevent cross-class pollution.</p>
 </div></span>
   
 </li>
@@ -294,7 +320,8 @@ Refer to the README for usage.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'><p>Call this initializer directly in your Anchormodel class.</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Call this initializer directly in your Anchormodel class.</p>
 </div></span>
   
 </li>
@@ -339,7 +366,8 @@ Refer to the README for usage.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'><p>Returns a Rails label that is compatible with the <a href="https://github.com/grosser/gettext_i18n_rails/">Rails FastGettext</a> gem.</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns a Rails label that is compatible with the <a href="https://github.com/grosser/gettext_i18n_rails/">Rails FastGettext</a> gem.</p>
 </div></span>
   
 </li>
@@ -384,7 +412,8 @@ Refer to the README for usage.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Call this initializer directly in your Anchormodel class. To set <code>@foo=:bar</code> for anchor <code>:ter</code>, use <code>new(:ter, foo: :bar)</code></p>
+    
+<p>Call this initializer directly in your Anchormodel class. To set <code>@foo=:bar</code> for anchor <code>:ter</code>, use <code>new(:ter, foo: :bar)</code></p>
 
 
   </div>
@@ -403,7 +432,8 @@ Refer to the README for usage.</p>
       
       
         &mdash;
-        <div class='inline'><p>The key under which the entry should be stored.</p>
+        <div class='inline'>
+<p>The key under which the entry should be stored.</p>
 </div>
       
     </li>
@@ -418,7 +448,8 @@ Refer to the README for usage.</p>
       
       
         &mdash;
-        <div class='inline'><p>All named arguments to Anchormodel are made available as instance attributes.</p>
+        <div class='inline'>
+<p>All named arguments to Anchormodel are made available as instance attributes.</p>
 </div>
       
     </li>
@@ -432,27 +463,31 @@ Refer to the README for usage.</p>
       <pre class="lines">
 
 
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
 38
 39
 40
 41
-42</pre>
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 27</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 38</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_attributes'>attributes</span><span class='rparen'>)</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_setup!'>setup!</span> <span class='kw'>unless</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_setup_completed'>setup_completed</span>
+
   <span class='ivar'>@key</span> <span class='op'>=</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
   <span class='ivar'>@index</span> <span class='op'>=</span> <span class='id identifier rubyid_entries_list'>entries_list</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
 
@@ -578,7 +613,8 @@ Refer to the README for usage.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Returns all possible values this Anchormodel can take.</p>
+    
+<p>Returns all possible values this Anchormodel can take.</p>
 
 
   </div>
@@ -592,12 +628,12 @@ Refer to the README for usage.</p>
       <pre class="lines">
 
 
-13
-14
-15</pre>
+24
+25
+26</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 13</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 24</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span>
   <span class='id identifier rubyid_entries_list'>entries_list</span>
@@ -618,7 +654,8 @@ Refer to the README for usage.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Retrieves a particular value given the key. Fails if not found.</p>
+    
+<p>Retrieves a particular value given the key. Fails if not found.</p>
 
 
   </div>
@@ -637,7 +674,8 @@ Refer to the README for usage.</p>
       
       
         &mdash;
-        <div class='inline'><p>The key of the value that should be retrieved.</p>
+        <div class='inline'>
+<p>The key of the value that should be retrieved.</p>
 </div>
       
     </li>
@@ -651,17 +689,66 @@ Refer to the README for usage.</p>
       <pre class="lines">
 
 
-19
-20
-21
-22</pre>
+30
+31
+32
+33</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 19</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 30</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_entries_hash'>entries_hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Retreived undefined anchor model key </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'> for </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'>.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="setup!-class_method">
+  
+    .<strong>setup!</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>When a descendant of Anchormodel is first used, it must overwrite the class_attributes to prevent cross-class pollution.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17
+18
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_setup!'>setup!</span>
+  <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>`setup!` was called twice for Anchormodel subclass </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='embexpr_end'>}</span><span class='tstring_content'>.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_setup_completed'>setup_completed</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_entries_list'>entries_list</span> <span class='op'>=</span> <span class='id identifier rubyid_entries_list'>entries_list</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_entries_hash'>entries_hash</span> <span class='op'>=</span> <span class='id identifier rubyid_entries_hash'>entries_hash</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_valid_keys'>valid_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_valid_keys'>valid_keys</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_setup_completed'>setup_completed</span> <span class='op'>=</span> <span class='kw'>true</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -698,12 +785,12 @@ Refer to the README for usage.</p>
       <pre class="lines">
 
 
-44
-45
-46</pre>
+57
+58
+59</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 44</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 57</span>
 
 <span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_key'>key</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span>
@@ -737,12 +824,12 @@ Refer to the README for usage.</p>
       <pre class="lines">
 
 
-53
-54
-55</pre>
+66
+67
+68</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 53</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#&lt;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>&gt;:</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_hash'>hash</span><span class='embexpr_end'>}</span><span class='tstring_content'>&gt;</span><span class='tstring_end'>&quot;</span></span>
@@ -763,7 +850,8 @@ Refer to the README for usage.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Returns a Rails label that is compatible with the <a href="https://github.com/grosser/gettext_i18n_rails/">Rails FastGettext</a> gem.</p>
+    
+<p>Returns a Rails label that is compatible with the <a href="https://github.com/grosser/gettext_i18n_rails/">Rails FastGettext</a> gem.</p>
 
 
   </div>
@@ -777,12 +865,12 @@ Refer to the README for usage.</p>
       <pre class="lines">
 
 
-49
-50
-51</pre>
+62
+63
+64</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 49</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 62</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_label'>label</span>
   <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_demodulize'>demodulize</span><span class='embexpr_end'>}</span><span class='tstring_content'>|</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_humanize'>humanize</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -816,12 +904,12 @@ Refer to the README for usage.</p>
       <pre class="lines">
 
 
-57
-58
-59</pre>
+70
+71
+72</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 57</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel.rb', line 70</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
   <span class='id identifier rubyid_inspect'>inspect</span>
@@ -836,9 +924,9 @@ Refer to the README for usage.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Dec 17 12:56:00 2022 by
+  Generated on Wed Jan 18 10:35:55 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.0.4).
+  0.9.28 (ruby-3.1.3).
 </div>
 
     </div>
