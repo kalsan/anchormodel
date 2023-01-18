@@ -8,11 +8,11 @@ class UserTest < Minitest::Test
   def test_collections
     # Order must fit as well
     assert_equal(
-      %i[guest moderator admin the_chosen_one].map{ |key| Role.find(key) },
+      %i[guest moderator admin the_chosen_one].map { |key| Role.find(key) },
       Role.all
     )
     assert_equal(
-      %i[en de fr it].map{ |key| Locale.find(key) },
+      %i[en de fr it].map { |key| Locale.find(key) },
       Locale.all
     )
   end

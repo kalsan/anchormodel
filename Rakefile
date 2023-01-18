@@ -21,6 +21,10 @@ task :gemspec do
     s.add_development_dependency 'rake', '~> 13.0.6'
     s.add_development_dependency 'pry', '~> 0.14.1'
 
+    # Linter
+    s.add_development_dependency 'rubocop', '~> 1.43.0'
+    s.add_development_dependency 'rubocop-rails', '~> 2.17.4'
+
     # Doc
     s.add_development_dependency 'yard', '~> 0.9.28'
     s.add_development_dependency 'yard-activesupport-concern', '~> 0.0.1'
@@ -39,5 +43,5 @@ task :gemspec do
 end
 
 # Create "test" task
-require "minitest/test_task"
+require 'minitest/test_task'
 Minitest::TestTask.create
