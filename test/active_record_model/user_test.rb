@@ -27,9 +27,24 @@ class UserTest < Minitest::Test
   end
 
   def test_comparison
-    bob = User.create(role: :guest, locale: :en)
-    alice = User.create(role: :guest, locale: :fr)
-    assert_equal(bob.role, alice.role)
+    bob = User.create(locale: :en)
+    alice = User.create(locale: :fr)
+    celine = User.create(locale: :fr)
+    assert_equal(alice.locale, celine.locale)
     assert bob.locale != alice.locale
+  end
+
+  def test_attributes
+    # Standalone
+    assert_equal 0, Role.find(:guest).privilege_level
+    # With a model
+    u = User.create(role: :the_chosen_one)
+    assert_equal 42, u.role.privilege_level
+  end
+
+  def test_custom_comparison
+    assert_equal(1, Role.find(:moderator) <=> Role.find(:admin))
+    assert_equal(-1, Role.find(:moderator) <=> Role.find(:guest))
+    assert_equal(0, Role.find(:moderator) <=> Role.find(:moderator))
   end
 end
