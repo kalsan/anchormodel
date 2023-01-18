@@ -1,6 +1,7 @@
 require 'bundler/gem_tasks'
 require_relative 'lib/anchormodel/version'
 
+# Create "gemspec" task
 task :gemspec do
   specification = Gem::Specification.new do |s|
     s.name = 'anchormodel'
@@ -36,3 +37,7 @@ task :gemspec do
     f.write(specification.to_ruby.strip)
   end
 end
+
+# Create "test" task
+require "minitest/test_task"
+Minitest::TestTask.create
