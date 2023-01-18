@@ -94,12 +94,15 @@
 <p><code>app/anchormodels/role.rb</code>:</p>
 
 <pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Role</span> <span class='op'>&lt;</span> <span class='const'><span class='object_link'><a href="Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span>
+  <span class='comment'># Make &lt;, &gt; etc. based on &lt;=&gt; operator whic hwe will define below
+</span>  <span class='id identifier rubyid_include'>include</span> <span class='const'>Comparable</span>
+
   <span class='comment'># Expose the attribute privilege_level
 </span>  <span class='id identifier rubyid_attr_reader'>attr_reader</span> <span class='symbol'>:privilege_level</span>
 
-  <span class='comment'># Overload &lt;=&gt; to make user roles comparable based on the privilege level
+  <span class='comment'># Define &lt;=&gt; to make user roles comparable based on the privilege level
 </span>  <span class='kw'>def</span> <span class='op'>&lt;=&gt;</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_privilege_level'>privilege_level</span> <span class='op'>&lt;=&gt;</span> <span class='ivar'>@privilege_level</span>
+    <span class='ivar'>@privilege_level</span> <span class='op'>&lt;=&gt;</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_privilege_level'>privilege_level</span>
   <span class='kw'>end</span>
 
   <span class='comment'># Declare all available roles
@@ -143,7 +146,7 @@
 </div></div>
 
       <div id="footer">
-  Generated on Wed Jan 18 10:35:54 2023 by
+  Generated on Wed Jan 18 11:24:43 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.1.3).
 </div>

@@ -1,4 +1,6 @@
 class Role < Anchormodel
+  include Comparable
+
   attr_reader :privilege_level
 
   new :guest, privilege_level: 0
@@ -7,6 +9,6 @@ class Role < Anchormodel
   new :the_chosen_one, privilege_level: 42
 
   def <=>(other)
-    other.privilege_level <=> @privilege_level
+    @privilege_level <=> other.privilege_level
   end
 end

@@ -50,12 +50,15 @@ entries of an Anchormodel.
 
 ```ruby
 class Role < Anchormodel
+  # Make <, > etc. based on <=> operator whic hwe will define below
+  include Comparable
+
   # Expose the attribute privilege_level
   attr_reader :privilege_level
 
-  # Overload <=> to make user roles comparable based on the privilege level
+  # Define <=> to make user roles comparable based on the privilege level
   def <=>(other)
-    other.privilege_level <=> @privilege_level
+    @privilege_level <=> other.privilege_level
   end
 
   # Declare all available roles

@@ -43,8 +43,9 @@ class UserTest < Minitest::Test
   end
 
   def test_custom_comparison
-    assert_equal(1, Role.find(:moderator) <=> Role.find(:admin))
-    assert_equal(-1, Role.find(:moderator) <=> Role.find(:guest))
+    assert_equal(-1, Role.find(:moderator) <=> Role.find(:admin))
+    assert_equal(1, Role.find(:moderator) <=> Role.find(:guest))
     assert_equal(0, Role.find(:moderator) <=> Role.find(:moderator))
+    assert Role.find(:moderator) < Role.find(:admin)
   end
 end
