@@ -1,6 +1,7 @@
-# unreleased
+# 0.1.0 (18.01.2023)
 
 - Remove `Anchormodels::` prefix and have anchormodels in the root namespace instead.
+- Add basic testing
 
 # 0.0.2 (30.12.2022)
 
