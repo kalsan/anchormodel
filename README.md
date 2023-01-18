@@ -49,7 +49,7 @@ entries of an Anchormodel.
 `app/anchormodels/role.rb`:
 
 ```ruby
-class Anchormodels::Role < Anchormodel
+class Role < Anchormodel
   # Expose the attribute privilege_level
   attr_reader :privilege_level
 
@@ -78,10 +78,10 @@ You may now use the following methods:
 
 ```ruby
 # Retrieve all user roles:
-Anchormodels::Role.all
+Role.all
 
 # Retrieve a specific role from the String and find its privilege level
-Anchormodels::Role.find(:guest).privilege_level
+Role.find(:guest).privilege_level
 
 # Implement a Rails helper that makes sure users can only edit other users that have a lower privilege level than themselves
 def user_can_edit?(this_user, other_user)

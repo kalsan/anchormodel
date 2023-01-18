@@ -11,7 +11,7 @@ module Anchormodel::ModelMixin
     # Creates an attribute linking to an Anchormodel. The attribute should be
     # present in the DB and the column should be named the same as `attribute_name.`
     # @param attribute_name [String,Symbol] The name and database column of the attribute
-    # @param anchor_class_name [String] Name of the Anchormodel class (omit if attribute `:foo_bar` holds an `Anchormodels::FooBar`)
+    # @param anchor_class_name [String] Name of the Anchormodel class (omit if attribute `:foo_bar` holds a `FooBar`)
     # @param optional [Boolean] If true, a presence validation is added to the model.
     def belongs_to_anchormodel(attribute_name, anchor_class_name = nil, optional: false)
       attribute_name = attribute_name.to_sym

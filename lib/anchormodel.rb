@@ -1,5 +1,5 @@
 # @api description
-# Inherit from this class and place your Anchormodel under `app/anchormodels/your_anchor_model.rb`. Use it like `Anchormodels::YourAnchorModel`.
+# Inherit from this class and place your Anchormodel under `app/anchormodels/your_anchor_model.rb`. Use it like `YourAnchorModel`.
 # Refer to the README for usage.
 class Anchormodel
   attr_reader :key
