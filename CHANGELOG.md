@@ -1,3 +1,14 @@
+# Unreleased
+
+- Add boolean accessor directly to all anchormodels
+- Add ActiveRecord::Enum style readers, writers and scopes to the model
+
+TODO:
+
+- Document above features in README.md
+- Test above feature
+- Test having classes deviating from the column name
+
 # 0.1.0 (18.01.2023)
 
 - Remove `Anchormodels::` prefix and have anchormodels in the root namespace instead.

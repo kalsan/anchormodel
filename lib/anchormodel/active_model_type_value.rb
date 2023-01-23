@@ -13,11 +13,11 @@ class Anchormodel::ActiveModelTypeValue < ActiveModel::Type::Value
   def serialize(value)
     return case value
            when Symbol, String
-             unless @attribute.anchor_class.valid_keys.include?(value.to_sym)
+             unless @attribute.anchormodel_class.valid_keys.include?(value.to_sym)
                fail("Attempt to set #{@attribute.attribute_name} to unsupported key #{value.inspect}.")
              end
              value.to_s
-           when @attribute.anchor_class
+           when @attribute.anchormodel_class
              value.key.to_s
            when nil
              nil
@@ -27,8 +27,8 @@ class Anchormodel::ActiveModelTypeValue < ActiveModel::Type::Value
   end
 
   def deserialize(value)
-    return value if value.is_a?(@attribute.anchor_class)
-    return @attribute.anchor_class.find(value)
+    return value if value.is_a?(@attribute.anchormodel_class)
+    return @attribute.anchormodel_class.find(value)
   end
 
   def changed?(old_value, new_value, _new_value_before_type_cast)

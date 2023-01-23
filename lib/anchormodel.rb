@@ -52,6 +52,11 @@ class Anchormodel
 
     # Register valid keys
     valid_keys << key
+
+    # Define boolean reader
+    self.class.define_method(:"#{key}?") do
+      @key == key
+    end
   end
 
   def ==(other)
