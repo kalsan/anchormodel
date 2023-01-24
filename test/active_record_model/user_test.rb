@@ -53,7 +53,7 @@ class UserTest < Minitest::Test
   def test_custom_comparison
     assert_equal(-1, Role.find(:moderator) <=> Role.find(:admin))
     assert_equal(1, Role.find(:moderator) <=> Role.find(:guest))
-    assert_equal(0, Role.find(:moderator) <=> Role.find(:moderator))
+    assert_equal(0, Role.find(:moderator) <=> Role.find('moderator'))
     assert Role.find(:moderator) < Role.find(:admin)
   end
 
@@ -64,9 +64,9 @@ class UserTest < Minitest::Test
 
   def test_alternative_column_name
     ben = User.create!(
-      role: Role.find(:moderator),
+      role:           Role.find(:moderator),
       secondary_role: Role.find(:admin),
-      locale: Locale.find(:de)
+      locale:         Locale.find(:de)
     )
     assert_equal(Role.find(:moderator), ben.role)
     assert_equal(Role.find(:admin), ben.secondary_role)

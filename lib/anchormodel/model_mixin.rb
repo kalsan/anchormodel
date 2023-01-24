@@ -18,7 +18,7 @@ module Anchormodel::ModelMixin
     # @param model_scopes [Boolean] If true, the model is given an ActiveRecord::Enum style scope `MyModel.mykey` for each key in the anchormodel
     # @param model_methods [Boolean, NilClass] If non-nil, this mass-assigns and overrides `model_readers`, `model_writers` and `model_scopes`
     def belongs_to_anchormodel(attribute_name, anchormodel_class = nil, optional: false, model_readers: true,
-                                model_writers: true, model_scopes: true, model_methods: nil)
+                               model_writers: true, model_scopes: true, model_methods: nil)
       anchormodel_class ||= attribute_name.to_s.classify.constantize
       attribute_name = attribute_name.to_sym
       attribute = Anchormodel::Attribute.new(self, attribute_name, anchormodel_class, optional)
@@ -76,7 +76,7 @@ module Anchormodel::ModelMixin
             fail("Anchormodel writer #{entry.key}! already defined for #{self}, add `model_writers: false` to `belongs_to_anchormodel :#{attribute_name}`.")
           end
           define_method(:"#{entry.key}!") do
-            public_send(:"#{attribute_name.to_s}=", entry)
+            public_send(:"#{attribute_name}=", entry)
           end
         end
       end
@@ -88,7 +88,7 @@ module Anchormodel::ModelMixin
           if respond_to?(entry.key)
             fail("Anchormodel scope #{entry.key} already defined for #{self}, add `model_scopes: false` to `belongs_to_anchormodel :#{attribute_name}`.")
           end
-          scope(entry.key, ->{where(attribute_name => entry.key)})
+          scope(entry.key, -> { where(attribute_name => entry.key) })
         end
       end
     end
