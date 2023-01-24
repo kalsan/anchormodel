@@ -59,6 +59,9 @@ module Anchormodel::ModelMixin
       # For a model User with anchormodel Role with keys :admin and :guest, this creates user.admin? and user.guest? (returning true iff role is admin/guest)
       if model_readers
         anchormodel_class.all.each do |entry|
+          if respond_to?(:"#{entry.key}?")
+            fail("Anchormodel reader #{entry.key}? already defined for #{self}, add `model_readers: false` to `belongs_to_anchormodel :#{attribute_name}`.")
+          end
           define_method(:"#{entry.key}?") do
             public_send(attribute_name.to_s) == entry
           end
@@ -69,6 +72,9 @@ module Anchormodel::ModelMixin
       # For a model User with anchormodel Role with keys :admin and :guest, this creates user.admin! and user.guest! (setting the role to admin/guest)
       if model_writers
         anchormodel_class.all.each do |entry|
+          if respond_to?(:"#{entry.key}!")
+            fail("Anchormodel writer #{entry.key}! already defined for #{self}, add `model_writers: false` to `belongs_to_anchormodel :#{attribute_name}`.")
+          end
           define_method(:"#{entry.key}!") do
             public_send(:"#{attribute_name.to_s}=", entry)
           end
@@ -79,6 +85,9 @@ module Anchormodel::ModelMixin
       # For a model User with anchormodel Role with keys :admin and :guest, this creates user.admin! and user.guest! (setting the role to admin/guest)
       if model_scopes
         anchormodel_class.all.each do |entry|
+          if respond_to?(entry.key)
+            fail("Anchormodel scope #{entry.key} already defined for #{self}, add `model_scopes: false` to `belongs_to_anchormodel :#{attribute_name}`.")
+          end
           scope(entry.key, ->{where(attribute_name => entry.key)})
         end
       end
