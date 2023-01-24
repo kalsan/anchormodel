@@ -44,7 +44,13 @@ meaningful, making you immediately understand what they stand for.
 This is why Anchormodel is strictly relying on String keys corresponding to the
 entries of an Anchormodel.
 
-# Example
+
+# Installation
+
+1. Add gem to Gemfile: `gem 'anchormodel'`
+2. In `application_record.rb`, add in the class body: `include Anchormodel::ModelMixin`
+
+# Basic example
 
 `app/anchormodels/role.rb`:
 
@@ -73,7 +79,11 @@ end
 ```ruby
 # The DB table `users` must have a String column `users.role`
 class User < ApplicationRecord
+  # If `users.role` has an `NOT NULL` constraint, use:
   belongs_to_anchormodel :role
+
+  # If `users.role` can be `NULL`, use the following instead:
+  belongs_to_anchormodel :role, optional: true
 end
 ```
 
@@ -93,9 +103,83 @@ end
 
 # Pretty print a user's role, e.g. using the Rails FastGettext gem:
 puts("User #{@user.name} has role #{@user.role.label}")
+
+# Check whether @user has role admin
+@user.role.admin? # true if and only if the role is admin (false otherwise)
 ```
 
-# Installation
+# Rails Enum style model methods
 
-1. Add gem to Gemfile: `gem 'anchormodel'`
-2. In `application_record.rb`, add in the class body: `include Anchormodel::ModelMixin`
+By default, Anchormodel adds three kinds of methods for each key to the model:
+
+- a reader (getter)
+- a writer (setter)
+- a Rails scope
+
+For instance:
+
+```ruby
+class User < ApplicationRecord
+  belongs_to_anchormodel :role # where Role has keys :guest, :manager and :admin
+  belongs_to_anchormodel :shape # where Shape has keys :circle and :rectangle
+end
+
+# User now implements the following methods, given that @user is retrieved as follows:
+@user = User.first # for example
+
+# Readers
+@user.guest? # same as @user.role.guest?
+@user.manager?
+@user.admin?
+@user.rectangle? # same as @user.shape.rectangle?
+@user.circle?
+# Writers
+@user.guest! # same as @user.role = Role.find(:guest)
+@user.manager!
+@user.admin!
+@user.rectangle! # same as @user.shape = Shape.find(:rectangle)
+@user.circle!
+# Scopes
+User.guest # same as User.where(role: 'guest')
+User.manager
+User.admin
+User.rectangle # same as User.where(shape: 'rectangle')
+User.circle
+```
+
+This behavior is similar as the one from Rails Enums. If you want to disable it, use:
+
+```ruby
+class User < ApplicationRecord
+  belongs_to_anchormodel :role, model_readers: false, model_writers: false, model_scopes: false
+  # or, equivalent, to disable all at once:
+  belongs_to_anchormodel :role, model_methods: false
+end
+```
+
+# Calling a column differently than the Anchormodel
+
+If your column name (and the model's attribute) is called differently than the Anchormodel, you may give the Anchormodel's class as the second argument. For example:
+
+```ruby
+# app/anchormodels/color.rb
+class Color < Anchormodel
+  new :green
+  new :red
+end
+
+# app/models/user.rb
+class User < ApplicationRecord
+  belongs_to_anchormodel :favorite_color, Color
+end
+```
+
+## Having multiple attributes to the same Anchormodel
+
+If you want to have multiple attributes in the same model pointing to the same Anchormodel, you need to disable `model_methods` for at least one of them (otherwise the model methods will clash in your model class):
+
+```ruby
+# app/models/user.rb
+  belongs_to_anchormodel :role
+  belongs_to_anchormodel :secondary_role, Role, model_methods: false
+```

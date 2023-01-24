@@ -1,6 +1,10 @@
 class UserTest < Minitest::Test
   def setup; end
 
+  def teardown
+    User.destroy_all
+  end
+
   def test_retrieval
     assert_equal Role.find(:guest), Role.find('guest')
   end
@@ -17,7 +21,11 @@ class UserTest < Minitest::Test
     )
   end
 
-  def test_setters_and_getters
+  def test_missing_key
+    assert_raises { Role.find(:does_not_exist) }
+  end
+
+  def test_basic_setters_and_getters
     u = User.create!(role: 'guest', locale: 'de') # String assignment
     assert_equal Role.find(:guest), u.role
     assert_equal Locale.find(:de), u.locale
@@ -47,5 +55,61 @@ class UserTest < Minitest::Test
     assert_equal(1, Role.find(:moderator) <=> Role.find(:guest))
     assert_equal(0, Role.find(:moderator) <=> Role.find(:moderator))
     assert Role.find(:moderator) < Role.find(:admin)
+  end
+
+  def test_presence_validation
+    valentine = User.new
+    assert_raises(ActiveRecord::RecordInvalid) { valentine.save! }
+  end
+
+  def test_alternative_column_name
+    ben = User.create!(
+      role: Role.find(:moderator),
+      secondary_role: Role.find(:admin),
+      locale: Locale.find(:de)
+    )
+    assert_equal(Role.find(:moderator), ben.role)
+    assert_equal(Role.find(:admin), ben.secondary_role)
+    assert_equal(Locale.find(:de), ben.locale)
+  end
+
+  def test_optional_attribute
+    jenny = User.create!(role: :admin, locale: :en)
+    assert_nil jenny.secondary_role
+  end
+
+  def test_model_readers_and_writers
+    pia = User.new
+    pia.admin!
+    assert_equal true, pia.admin?
+    assert_equal false, pia.guest?
+    assert_equal Role.find(:admin), pia.role
+  end
+
+  def test_model_scopes
+    User.create!(role: :admin, locale: :en)
+    User.create!(role: :admin, locale: :en)
+    User.create!(role: :moderator, locale: :en)
+    assert_equal 2, User.admin.count
+    assert_equal 1, User.moderator.count
+    assert_equal 0, User.guest.count
+  end
+
+  def test_model_readers_writers_with_different_class_name
+    pia = User.new(locale: :en)
+    pia.de!
+    assert_equal true, pia.de?
+    assert_equal false, pia.fr?
+    assert_equal Locale.find(:de), pia.preferred_locale
+    assert_equal Locale.find(:en), pia.locale
+  end
+
+  def test_model_scopes_with_different_class_name
+    User.create!(role: :admin, locale: :en, preferred_locale: :de)
+    User.create!(role: :admin, locale: :en, preferred_locale: :de)
+    User.create!(role: :admin, locale: :en, preferred_locale: :fr)
+    assert_equal 2, User.de.count
+    assert_equal 1, User.fr.count
+    assert_equal 0, User.en.count
   end
 end
