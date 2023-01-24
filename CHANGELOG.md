@@ -2,6 +2,7 @@
 
 - Add boolean accessor directly to all anchormodels
 - Add ActiveRecord::Enum style readers, writers and scopes to the model
+- Attribute#anchor_class is now called `anchormodel_class`.
 
 # 0.1.0 (18.01.2023)
 
