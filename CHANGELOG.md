@@ -1,4 +1,4 @@
-# Unreleased
+# 0.1.1 (24.01.2023)
 
 - Add boolean accessor directly to all anchormodels
 - Add ActiveRecord::Enum style readers, writers and scopes to the model
