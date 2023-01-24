@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Wrapper for easy interaction with the dummy rails app
+
+export RAILS_ENV=test
+cd test/dummy
+bin/rails $@
