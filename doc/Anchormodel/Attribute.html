@@ -120,6 +120,33 @@
       <li class="public ">
   <span class="summary_signature">
     
+      <a href="#anchormodel_class-instance_method" title="#anchormodel_class (instance method)">#<strong>anchormodel_class</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#attribute_name-instance_method" title="#attribute_name (instance method)">#<strong>attribute_name</strong>  &#x21d2; Object </a>
     
 
@@ -187,31 +214,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#anchor_class-instance_method" title="#anchor_class (instance method)">#<strong>anchor_class</strong>  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Getter for the Anchormodel class based on the name passed to the initializer.</p>
-</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(model_class, attribute_name, anchor_class_name = nil, optional = false)  &#x21d2; Attribute </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(model_class, attribute_name, anchormodel_class = nil, optional = false)  &#x21d2; Attribute </a>
     
 
     
@@ -243,7 +246,7 @@
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    #<strong>initialize</strong>(model_class, attribute_name, anchor_class_name = nil, optional = false)  &#x21d2; <tt><span class='object_link'><a href="" title="Anchormodel::Attribute (class)">Attribute</a></span></tt> 
+    #<strong>initialize</strong>(model_class, attribute_name, anchormodel_class = nil, optional = false)  &#x21d2; <tt><span class='object_link'><a href="" title="Anchormodel::Attribute (class)">Attribute</a></span></tt> 
   
 
   
@@ -295,10 +298,10 @@
   
     <li>
       
-        <span class='name'>anchor_class_name</span>
+        <span class='name'>anchormodel_class</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Class</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>nil</tt>)</em>
@@ -306,7 +309,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Name of the Anchormodel class (omit if attribute <code>:foo_bar</code> holds an <code>FooBar</code>)</p>
+<p>Class of the Anchormodel (omit if attribute <code>:foo_bar</code> holds an <code>FooBar</code>)</p>
 </div>
       
     </li>
@@ -338,20 +341,20 @@
       <pre class="lines">
 
 
-12
 13
 14
 15
 16
-17</pre>
+17
+18</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 12</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 13</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='comma'>,</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_anchor_class_name'>anchor_class_name</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_optional'>optional</span> <span class='op'>=</span> <span class='kw'>false</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='comma'>,</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_optional'>optional</span> <span class='op'>=</span> <span class='kw'>false</span><span class='rparen'>)</span>
   <span class='ivar'>@model_class</span> <span class='op'>=</span> <span class='id identifier rubyid_model_class'>model_class</span>
   <span class='ivar'>@attribute_name</span> <span class='op'>=</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
-  <span class='ivar'>@anchor_class_name</span> <span class='op'>=</span> <span class='id identifier rubyid_anchor_class_name'>anchor_class_name</span> <span class='op'>||</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_classify'>classify</span>
+  <span class='ivar'>@anchormodel_class</span> <span class='op'>=</span> <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span>
   <span class='ivar'>@optional</span> <span class='op'>=</span> <span class='id identifier rubyid_optional'>optional</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -367,7 +370,48 @@
       
       <span id=""></span>
       <div class="method_details first">
-  <h3 class="signature first" id="attribute_name-instance_method">
+  <h3 class="signature first" id="anchormodel_class-instance_method">
+  
+    #<strong>anchormodel_class</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+6
+7
+8</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 6</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span>
+  <span class='ivar'>@anchormodel_class</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="attribute_name-instance_method">
   
     #<strong>attribute_name</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
   
@@ -431,12 +475,12 @@
       <pre class="lines">
 
 
-6
 7
-8</pre>
+8
+9</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 6</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 7</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_optional'>optional</span>
   <span class='ivar'>@optional</span>
@@ -449,57 +493,10 @@
   </div>
 
 
-  <div id="instance_method_details" class="method_details_list">
-    <h2>Instance Method Details</h2>
-
-    
-      <div class="method_details first">
-  <h3 class="signature first" id="anchor_class-instance_method">
-  
-    #<strong>anchor_class</strong>  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Getter for the Anchormodel class based on the name passed to the initializer. We are loading the anchor class lazily, because the model mixin instanciates this statically -&gt; avoid premature anchor class loading</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-21
-22
-23</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 21</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_anchor_class'>anchor_class</span>
-  <span class='ivar'>@anchor_class</span> <span class='op'>||=</span> <span class='ivar'>@anchor_class_name</span><span class='period'>.</span><span class='id identifier rubyid_constantize'>constantize</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-  </div>
-
 </div>
 
       <div id="footer">
-  Generated on Wed Jan 18 11:24:43 2023 by
+  Generated on Tue Jan 24 20:27:59 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.1.3).
 </div>
