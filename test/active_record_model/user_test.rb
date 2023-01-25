@@ -112,4 +112,10 @@ class UserTest < Minitest::Test
     assert_equal 1, User.fr.count
     assert_equal 0, User.en.count
   end
+
+  def test_rails_blank_assignment
+    u = User.new(role: :admin, secondary_role: :admin, locale: :en, preferred_locale: :en)
+    u.secondary_role = ''
+    assert_nil u.secondary_role
+  end
 end

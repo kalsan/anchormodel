@@ -1,3 +1,7 @@
+# 0.1.2 (25.01.2023)
+
+- Consider empty string as nil (this is necessary to make Rails assignments work)
+
 # 0.1.1 (24.01.2023)
 
 - Add boolean accessor directly to all anchormodels

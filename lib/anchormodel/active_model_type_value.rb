@@ -11,6 +11,7 @@ class Anchormodel::ActiveModelTypeValue < ActiveModel::Type::Value
 
   # Implementing this instead of cast to force key validation in any case
   def serialize(value)
+    value = value.presence
     return case value
            when Symbol, String
              unless @attribute.anchormodel_class.valid_keys.include?(value.to_sym)
@@ -27,6 +28,7 @@ class Anchormodel::ActiveModelTypeValue < ActiveModel::Type::Value
   end
 
   def deserialize(value)
+    value = value.presence
     return value if value.is_a?(@attribute.anchormodel_class)
     return @attribute.anchormodel_class.find(value)
   end
