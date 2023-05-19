@@ -1,3 +1,7 @@
+# 0.1.3 (19.05.2023)
+
+- Add Rails generator
+
 # 0.1.2 (25.01.2023)
 
 - Consider empty string as nil (this is necessary to make Rails assignments work)
