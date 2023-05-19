@@ -1,0 +1,8 @@
+Description:
+    Generate a single Anchormodel
+
+Example:
+    bin/rails generate anchormodel Color
+
+    This will create:
+        app/anchormodels/color.rb
