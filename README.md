@@ -50,6 +50,14 @@ entries of an Anchormodel.
 1. Add gem to Gemfile: `gem 'anchormodel'`
 2. In `application_record.rb`, add in the class body: `include Anchormodel::ModelMixin`
 
+# Generator
+
+For convenience, Anchormodel provides a Rails generator:
+
+`rails generate anchormodel Role`
+
+This will create `app/anchormodels/role.rb`.
+
 # Basic example
 
 `app/anchormodels/role.rb`:
