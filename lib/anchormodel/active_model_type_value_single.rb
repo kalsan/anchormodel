@@ -5,6 +5,10 @@ class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
     @attribute = attribute
   end
 
+  def type
+    :anchormodel
+  end
+
   # This converts an Anchormodel instance to string for DB
   def cast(value)
     value = value.presence
