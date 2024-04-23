@@ -77,7 +77,8 @@ class Anchormodel
   end
 end
 
-require 'anchormodel/active_model_type_value'
+require 'anchormodel/util'
+require 'anchormodel/active_model_type_value_single'
 require 'anchormodel/attribute'
 require 'anchormodel/model_mixin'
 require 'anchormodel/version'

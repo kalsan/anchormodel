@@ -1,5 +1,5 @@
 # @see https://www.rubydoc.info/docs/rails/ActiveModel/Type/Value
-class Anchormodel::ActiveModelTypeValue < ActiveModel::Type::Value
+class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
   def initialize(attribute)
     super()
     @attribute = attribute
