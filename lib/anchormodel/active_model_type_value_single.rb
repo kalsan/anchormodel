@@ -5,11 +5,14 @@ class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
     @attribute = attribute
   end
 
+  # This converts an Anchormodel instance to string for DB
   def cast(value)
-    serialize value
+    value = value.presence
+    return value if value.is_a?(@attribute.anchormodel_class)
+    return @attribute.anchormodel_class.find(value)
   end
 
-  # Implementing this instead of cast to force key validation in any case
+  # This converts DB or input to an Anchormodel instance
   def serialize(value)
     value = value.presence
     return case value
@@ -25,12 +28,6 @@ class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
            else
              fail "Attempt to set #{@attribute.attribute_name} to unsupported type #{value.class}"
            end
-  end
-
-  def deserialize(value)
-    value = value.presence
-    return value if value.is_a?(@attribute.anchormodel_class)
-    return @attribute.anchormodel_class.find(value)
   end
 
   def changed?(old_value, new_value, _new_value_before_type_cast)
