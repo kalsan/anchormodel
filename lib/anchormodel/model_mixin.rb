@@ -9,10 +9,10 @@ module Anchormodel::ModelMixin
 
   class_methods do
     # Creates an attribute linking to an Anchormodel. The attribute should be
-    # present in the DB and the column should be named the same as `attribute_name.`
+    # present in the DB and the column should be of type String and named the same as `attribute_name.`
     # @param attribute_name [String,Symbol] The name and database column of the attribute
     # @param anchormodel_class [Class] Class of the Anchormodel (omit if attribute `:foo_bar` holds a `FooBar`)
-    # @param optional [Boolean] If true, a presence validation is added to the model.
+    # @param optional [Boolean] If false, a presence validation is added to the model.
     # @param model_readers [Boolean] If true, the model is given an ActiveRecord::Enum style method `my_model.my_key?` reader for each key in the anchormodel
     # @param model_writers [Boolean] If true, the model is given an ActiveRecord::Enum style method `my_model.my_key!` writer for each key in the anchormodel
     # @param model_scopes [Boolean] If true, the model is given an ActiveRecord::Enum style scope `MyModel.mykey` for each key in the anchormodel
