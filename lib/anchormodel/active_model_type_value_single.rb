@@ -34,6 +34,17 @@ class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
            end
   end
 
+  def serializable?(value)
+    return case value
+           when Symbol, String
+             @attribute.anchormodel_class.valid_keys.exclude?(value.to_sym)
+           when nil, @attribute.anchormodel_class
+             true
+           else
+             false
+           end
+  end
+
   def changed?(old_value, new_value, _new_value_before_type_cast)
     return deserialize(old_value) != deserialize(new_value)
   end
