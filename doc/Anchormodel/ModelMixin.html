@@ -6,7 +6,7 @@
 <title>
   Module: Anchormodel::ModelMixin
   
-    &mdash; Documentation by YARD 0.9.28
+    &mdash; Documentation by YARD 0.9.36
   
 </title>
 
@@ -117,7 +117,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#belongs_to_anchormodel-class_method" title="belongs_to_anchormodel (class method)">.<strong>belongs_to_anchormodel</strong>(attribute_name, anchormodel_class = nil, optional: false, model_readers: true, model_writers: true, model_scopes: true, model_methods: nil)  &#x21d2; Object </a>
+      <a href="#belongs_to_anchormodel-class_method" title="belongs_to_anchormodel (class method)">.<strong>belongs_to_anchormodel</strong>(*args, **kwargs)  &#x21d2; Object </a>
     
 
     
@@ -151,7 +151,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="belongs_to_anchormodel-class_method">
   
-    .<strong>belongs_to_anchormodel</strong>(attribute_name, anchormodel_class = nil, optional: false, model_readers: true, model_writers: true, model_scopes: true, model_methods: nil)  &#x21d2; <tt>Object</tt> 
+    .<strong>belongs_to_anchormodel</strong>(*args, **kwargs)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -160,141 +160,20 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Creates an attribute linking to an Anchormodel. The attribute should be present in the DB and the column should be named the same as <code>attribute_name.</code></p>
+<p>Creates an attribute linking to an Anchormodel. The attribute should be present in the DB and the column should be of type String and named the same as <code>attribute_name</code>.</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>attribute_name</span>
-      
-      
-        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>The name and database column of the attribute</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>anchormodel_class</span>
-      
-      
-        <span class='type'>(<tt>Class</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Class of the Anchormodel (omit if attribute <code>:foo_bar</code> holds a <code>FooBar</code>)</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>optional</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>false</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>If true, a presence validation is added to the model.</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>model_readers</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>If true, the model is given an ActiveRecord::Enum style method <code>my_model.my_key?</code> reader for each key in the anchormodel</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>model_writers</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>If true, the model is given an ActiveRecord::Enum style method <code>my_model.my_key!</code> writer for each key in the anchormodel</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>model_scopes</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>If true, the model is given an ActiveRecord::Enum style scope <code>MyModel.mykey</code> for each key in the anchormodel</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>model_methods</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>, <tt>NilClass</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>If non-nil, this mass-assigns and overrides <code>model_readers</code>, <code>model_writers</code> and <code>model_scopes</code></p>
-</div>
-      
-    </li>
-  
-</ul>
 
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li>Parameters</li>
+    
+  </ul>
 
 </div><table class="source_code">
   <tr>
@@ -302,159 +181,15 @@
       <pre class="lines">
 
 
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94</pre>
+14
+15
+16</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/model_mixin.rb', line 20</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/model_mixin.rb', line 14</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_belongs_to_anchormodel'>belongs_to_anchormodel</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>optional:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='label'>model_readers:</span> <span class='kw'>true</span><span class='comma'>,</span>
-                           <span class='label'>model_writers:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>model_scopes:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>model_methods:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span> <span class='op'>||=</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_classify'>classify</span><span class='period'>.</span><span class='id identifier rubyid_constantize'>constantize</span>
-  <span class='id identifier rubyid_attribute_name'>attribute_name</span> <span class='op'>=</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
-  <span class='id identifier rubyid_attribute'>attribute</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Attribute.html" title="Anchormodel::Attribute (class)">Attribute</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Attribute.html#initialize-instance_method" title="Anchormodel::Attribute#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span><span class='comma'>,</span> <span class='id identifier rubyid_optional'>optional</span><span class='rparen'>)</span>
-
-  <span class='comment'># Mass configurations if model_methods was specfied
-</span>  <span class='kw'>unless</span> <span class='id identifier rubyid_model_methods'>model_methods</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
-    <span class='id identifier rubyid_model_readers'>model_readers</span> <span class='op'>=</span> <span class='id identifier rubyid_model_methods'>model_methods</span>
-    <span class='id identifier rubyid_model_writers'>model_writers</span> <span class='op'>=</span> <span class='id identifier rubyid_model_methods'>model_methods</span>
-    <span class='id identifier rubyid_model_scopes'>model_scopes</span> <span class='op'>=</span> <span class='id identifier rubyid_model_methods'>model_methods</span>
-  <span class='kw'>end</span>
-
-  <span class='comment'># Register attribute
-</span>  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_anchormodel_attributes'>anchormodel_attributes</span> <span class='op'>=</span> <span class='id identifier rubyid_anchormodel_attributes'>anchormodel_attributes</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='lbrace'>{</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_attribute'>attribute</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
-
-  <span class='comment'># Add presence validation if required
-</span>  <span class='kw'>unless</span> <span class='id identifier rubyid_optional'>optional</span>
-    <span class='id identifier rubyid_validates'>validates</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='label'>presence:</span> <span class='kw'>true</span>
-  <span class='kw'>end</span>
-
-  <span class='comment'># Make casting work
-</span>  <span class='comment'># Define serializer/deserializer
-</span>  <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="ActiveModelTypeValue.html" title="Anchormodel::ActiveModelTypeValue (class)">ActiveModelTypeValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="ActiveModelTypeValue.html#initialize-instance_method" title="Anchormodel::ActiveModelTypeValue#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_attribute'>attribute</span><span class='rparen'>)</span>
-
-  <span class='comment'># Overwrite reader to force building anchors at every retrieval
-</span>  <span class='id identifier rubyid_define_method'>define_method</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> <span class='kw'>do</span>
-    <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span><span class='period'>.</span><span class='id identifier rubyid_deserialize'>deserialize</span><span class='lparen'>(</span><span class='id identifier rubyid_read_attribute'>read_attribute</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='rparen'>)</span><span class='rparen'>)</span>
-  <span class='kw'>end</span>
-
-  <span class='comment'># Override writer to fail early when an invalid target value is specified
-</span>  <span class='id identifier rubyid_define_method'>define_method</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>=</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_new_value'>new_value</span><span class='op'>|</span>
-    <span class='id identifier rubyid_write_attribute'>write_attribute</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span><span class='period'>.</span><span class='id identifier rubyid_serialize'>serialize</span><span class='lparen'>(</span><span class='id identifier rubyid_new_value'>new_value</span><span class='rparen'>)</span><span class='rparen'>)</span>
-  <span class='kw'>end</span>
-
-  <span class='comment'># Supply serializer and deserializer
-</span>  <span class='id identifier rubyid_attribute'>attribute</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span>
-
-  <span class='comment'># Create ActiveRecord::Enum style reader directly in the model if asked to do so
-</span>  <span class='comment'># For a model User with anchormodel Role with keys :admin and :guest, this creates user.admin? and user.guest? (returning true iff role is admin/guest)
-</span>  <span class='kw'>if</span> <span class='id identifier rubyid_model_readers'>model_readers</span>
-    <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_entry'>entry</span><span class='op'>|</span>
-      <span class='kw'>if</span> <span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:&quot;#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>?</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-        <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Anchormodel reader </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>? already defined for </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='embexpr_end'>}</span><span class='tstring_content'>, add `model_readers: false` to `belongs_to_anchormodel :</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>`.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-      <span class='kw'>end</span>
-      <span class='id identifier rubyid_define_method'>define_method</span><span class='lparen'>(</span><span class='symbol'>:&quot;#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>?</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
-        <span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='id identifier rubyid_entry'>entry</span>
-      <span class='kw'>end</span>
-    <span class='kw'>end</span>
-  <span class='kw'>end</span>
-
-  <span class='comment'># Create ActiveRecord::Enum style writer directly in the model if asked to do so
-</span>  <span class='comment'># For a model User with anchormodel Role with keys :admin and :guest, this creates user.admin! and user.guest! (setting the role to admin/guest)
-</span>  <span class='kw'>if</span> <span class='id identifier rubyid_model_writers'>model_writers</span>
-    <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_entry'>entry</span><span class='op'>|</span>
-      <span class='kw'>if</span> <span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:&quot;#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>!</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-        <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Anchormodel writer </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>! already defined for </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='embexpr_end'>}</span><span class='tstring_content'>, add `model_writers: false` to `belongs_to_anchormodel :</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>`.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-      <span class='kw'>end</span>
-      <span class='id identifier rubyid_define_method'>define_method</span><span class='lparen'>(</span><span class='symbol'>:&quot;#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>!</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
-        <span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='symbol'>:&quot;#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>=</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_entry'>entry</span><span class='rparen'>)</span>
-      <span class='kw'>end</span>
-    <span class='kw'>end</span>
-  <span class='kw'>end</span>
-
-  <span class='comment'># Create ActiveRecord::Enum style scope directly in the model class if asked to do so
-</span>  <span class='comment'># For a model User with anchormodel Role with keys :admin and :guest, this creates user.admin! and user.guest! (setting the role to admin/guest)
-</span>  <span class='kw'>if</span> <span class='id identifier rubyid_model_scopes'>model_scopes</span>
-    <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_entry'>entry</span><span class='op'>|</span>
-      <span class='kw'>if</span> <span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
-        <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Anchormodel scope </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'> already defined for </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='embexpr_end'>}</span><span class='tstring_content'>, add `model_scopes: false` to `belongs_to_anchormodel :</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>`.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-      <span class='kw'>end</span>
-      <span class='id identifier rubyid_scope'>scope</span><span class='lparen'>(</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tlambda'>-&gt;</span> <span class='tlambeg'>{</span> <span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
-    <span class='kw'>end</span>
-  <span class='kw'>end</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_belongs_to_anchormodel'>belongs_to_anchormodel</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Util.html" title="Anchormodel::Util (module)">Util</a></span></span><span class='period'>.</span><span class='id identifier rubyid_install_methods_in_model'><span class='object_link'><a href="Util.html#install_methods_in_model-class_method" title="Anchormodel::Util.install_methods_in_model (method)">install_methods_in_model</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -466,9 +201,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Jan 25 12:36:40 2023 by
+  Generated on Tue Apr 23 17:20:43 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.1.3).
+  0.9.36 (ruby-3.2.2).
 </div>
 
     </div>

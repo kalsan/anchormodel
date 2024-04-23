@@ -1,4 +1,4 @@
-# unreleased (23.04.2024)
+# 0.1.4 (23.04.2024)
 
 - Stick closer to the Rails API of Value
 - Enhance testing
