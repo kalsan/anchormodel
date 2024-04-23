@@ -118,4 +118,12 @@ class UserTest < Minitest::Test
     u.secondary_role = ''
     assert_nil u.secondary_role
   end
+
+  def test_invalid_key_update
+    assert_raises(RuntimeError) { User.create!(role: :admin, locale: :de, preferred_locale: :invalid) }
+  end
+
+  def test_invalid_key_assignment
+    assert_raises(RuntimeError) { User.new(role: :invalid) }
+  end
 end
