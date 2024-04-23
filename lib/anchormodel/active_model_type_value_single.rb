@@ -45,7 +45,8 @@ class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
            end
   end
 
-  def changed?(old_value, new_value, _new_value_before_type_cast)
-    return deserialize(old_value) != deserialize(new_value)
+  def changed_in_place?(raw_old_value, value)
+    old_value = deserialize(raw_old_value)
+    old_value != value
   end
 end
