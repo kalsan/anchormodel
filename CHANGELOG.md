@@ -1,3 +1,8 @@
+# 0.1.4 (23.04.2024)
+
+- Stick closer to the Rails API of Value
+- Enhance testing
+
 # 0.1.3 (19.05.2023)
 
 - Add Rails generator
