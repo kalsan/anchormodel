@@ -119,11 +119,22 @@ class UserTest < Minitest::Test
     assert_nil u.secondary_role
   end
 
+  # Attempting to create a model with an invalid constant name should fail
   def test_invalid_key_update
     assert_raises(RuntimeError) { User.create!(role: :admin, locale: :de, preferred_locale: :invalid) }
   end
 
+  # Attempting to assign an invalid constant name to a model should fail
   def test_invalid_key_assignment
     assert_raises(RuntimeError) { User.new(role: :invalid) }
+  end
+
+  # An invalid constant name into the DB should raise when reading
+  def test_invalid_db_read
+    sql = <<~SQL.squish
+      INSERT INTO users (role, locale, preferred_locale, created_at, updated_at) VALUES ('invalid', 'de', 'de', 'now', 'now')
+    SQL
+    ActiveRecord::Base.connection.execute(sql)
+    assert_raises(RuntimeError) { User.first.role }
   end
 end
