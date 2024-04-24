@@ -1,6 +1,7 @@
 # unreleased
 
 - Enhance documentation
+- Add support for simple_form
 
 # 0.1.4 (23.04.2024)
 

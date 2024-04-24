@@ -35,7 +35,7 @@ are regular classes and can easily be extended.
 
 ### ActiveEnum
 
-The gem (ActiveEnum)[https://github.com/adzap/active_enum] allows to create
+The gem [ActiveEnum](https://github.com/adzap/active_enum) allows to create
 Enum-like classes that can be extended. However it only supports Integer keys. I
 find this unsatisfactory, as debugging with tools like `psql` or `mysql` is made
 unnecessarily hard when you only see numbers. Keys for enums should be
@@ -122,8 +122,25 @@ Your form could look something like this:
 <%= form_with(model: user) do |form| %>
   <%# ... %>
   <%= form.collection_select :role, Role.all, :key, :label %>
+  <%# ... %>
 <% end %>
 ```
+
+## Using Anchormodel with Simpleform
+
+Anchormodel has built-in support for the [simple_form](https://github.com/heartcombo/simple_form) gem by providing an input for the type `:anchormodel` which displays anchormodel attributes as a collection select.
+
+After SimpleForm is installed, you can write your form as:
+
+```erb
+<%= simple_form_for user do |f| %>
+  <%# ... %>
+  <%= f.input :role %>
+  <%# ... %>
+<% end %>
+```
+
+Note that `as: :radio_buttons` is not supported at this time.
 
 # Rails Enum style model methods
 
