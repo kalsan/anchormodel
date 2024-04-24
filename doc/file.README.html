@@ -6,7 +6,7 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.36
+    &mdash; Documentation by YARD 0.9.28
   
 </title>
 
@@ -85,7 +85,7 @@
 
 <h3 id="label-ActiveEnum">ActiveEnum</h3>
 
-<p>The gem (<a href="https://github.com/adzap/active_enum">ActiveEnum)</a> allows to create Enum-like classes that can be extended. However it only supports Integer keys. I find this unsatisfactory, as debugging with tools like <code>psql</code> or <code>mysql</code> is made unnecessarily hard when you only see numbers. Keys for enums should be meaningful, making you immediately understand what they stand for.</p>
+<p>The gem <a href="https://github.com/adzap/active_enum">ActiveEnum</a> allows to create Enum-like classes that can be extended. However it only supports Integer keys. I find this unsatisfactory, as debugging with tools like <code>psql</code> or <code>mysql</code> is made unnecessarily hard when you only see numbers. Keys for enums should be meaningful, making you immediately understand what they stand for.</p>
 
 <p>This is why Anchormodel is strictly relying on String keys corresponding to the entries of an Anchormodel.</p>
 
@@ -158,6 +158,37 @@
 <span class='comment'># Check whether @user has role admin
 </span><span class='ivar'>@user</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span><span class='period'>.</span><span class='id identifier rubyid_admin?'>admin?</span> <span class='comment'># true if and only if the role is admin (false otherwise)
 </span></code></pre>
+
+<p>Your form could look something like this:</p>
+
+<pre class="code ruby"><code class="ruby">&lt;%= form_with(model: user) do |form| %&gt;
+  &lt;%# ... %&gt;
+  &lt;%= form.collection_select :role, Role.all, :key, :label %&gt;
+  &lt;%# ... %&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<h2 id="label-Using+Anchormodel+with+Simpleform">Using Anchormodel with Simpleform</h2>
+
+<p>Anchormodel has built-in support for the <a href="https://github.com/heartcombo/simple_form">simple_form</a> gem by providing an input for the type <code>:anchormodel</code> which displays anchormodel attributes as a collection select.</p>
+
+<p>After SimpleForm is installed, you can write your form as:</p>
+
+<pre class="code ruby"><code class="ruby">&lt;%= simple_form_for user do |f| %&gt;
+  &lt;%# ... %&gt;
+  &lt;%= f.input :role %&gt;
+  &lt;%# ... %&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<p>Or, if you prefer radio buttons instead:</p>
+
+<pre class="code ruby"><code class="ruby">&lt;%= simple_form_for user do |f| %&gt;
+  &lt;%# ... %&gt;
+  &lt;%= f.input :role, as: :anchormodel_radio_buttons %&gt;
+  &lt;%# ... %&gt;
+&lt;% end %&gt;
+</code></pre>
 
 <h1 id="label-Rails+Enum+style+model+methods">Rails Enum style model methods</h1>
 
@@ -236,9 +267,9 @@
 </div></div>
 
       <div id="footer">
-  Generated on Tue Apr 23 17:20:47 2024 by
+  Generated on Wed Apr 24 17:01:46 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.2.2).
+  0.9.28 (ruby-3.2.2).
 </div>
 
     </div>
