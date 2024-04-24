@@ -140,7 +140,16 @@ After SimpleForm is installed, you can write your form as:
 <% end %>
 ```
 
-Note that `as: :radio_buttons` is not supported at this time.
+Or, if you prefer radio buttons instead:
+
+
+```erb
+<%= simple_form_for user do |f| %>
+  <%# ... %>
+  <%= f.input :role, as: :anchormodel_radio_buttons %>
+  <%# ... %>
+<% end %>
+```
 
 # Rails Enum style model methods
 

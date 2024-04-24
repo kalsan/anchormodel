@@ -7,15 +7,17 @@ unless defined? SimpleForm
 
 end
 if defined? SimpleForm
-  class AnchormodelInput < SimpleForm::Inputs::CollectionSelectInput
+  class AnchormodelRadioButtonsInput < SimpleForm::Inputs::CollectionRadioButtonsInput
     include Anchormodel::SimpleFormInputs::Helpers::AnchormodelInputsCommon
 
     private
 
     def sf_selection_key
-      :selected
+      :checked
     end
 
-    def before_render_input; end
+    def before_render_input
+      @input_type = :radio_buttons
+    end
   end
 end
