@@ -1,3 +1,7 @@
+# unreleased
+
+- Enhance documentation
+
 # 0.1.4 (23.04.2024)
 
 - Stick closer to the Rails API of Value

@@ -116,6 +116,15 @@ puts("User #{@user.name} has role #{@user.role.label}")
 @user.role.admin? # true if and only if the role is admin (false otherwise)
 ```
 
+Your form could look something like this:
+
+```erb
+<%= form_with(model: user) do |form| %>
+  <%# ... %>
+  <%= form.collection_select :role, Role.all, :key, :label %>
+<% end %>
+```
+
 # Rails Enum style model methods
 
 By default, Anchormodel adds three kinds of methods for each key to the model:
