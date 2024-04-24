@@ -11,13 +11,13 @@ if defined? SimpleForm
     def input(wrapper_options)
       unless object.respond_to?(:anchormodel_attributes)
         fail("The form field object does not appear to respond to `anchormodel_attributes`, \
-did you `include Anchormodel::ModelMixin` in your `application_record.rb`? Affected object: #{object.inspect}")
+  did you `include Anchormodel::ModelMixin` in your `application_record.rb`? Affected object: #{object.inspect}")
       end
 
       am_attr = object.anchormodel_attributes[@attribute_name]
       unless am_attr
         fail("#{@attribute_name.inspect} does not look like an Anchormodel attribute, is `belongs_to_anchormodel` called in your model? \
-Affected object: #{object.inspect}")
+  Affected object: #{object.inspect}")
       end
       am_class = am_attr.anchormodel_class
 
