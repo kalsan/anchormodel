@@ -149,5 +149,56 @@ class UserTest < Minitest::Test
   def test_multi_basics
     u = User.create!(role: 'guest', locale: 'de')
     assert_equal(Set.new, u.animals)
+    # Adding
+    u.animals << 'cat'
+    assert_equal(Set.new([Animal.find(:cat)]), u.animals)
+    u.animals.add :dog
+    assert_equal(Set.new([Animal.find(:cat), Animal.find(:dog)]), u.animals)
+    u.animals.add Animal.find(:horse)
+    assert_equal(Set.new([Animal.find(:cat), Animal.find(:dog), Animal.find(:horse)]), u.animals)
+    # Removing
+    u.animals.delete 'cat'
+    assert_equal(Set.new([Animal.find(:dog), Animal.find(:horse)]), u.animals)
+    u.animals.delete :dog
+    assert_equal(Set.new([Animal.find(:horse)]), u.animals)
+    u.animals.delete Animal.find(:horse)
+    assert_equal(false, u.animals.any?)
+    # Setting
+    u.animals = %i[cat dog]
+    assert_equal(Set.new([Animal.find(:cat), Animal.find(:dog)]), u.animals)
+    # Clearing
+    u.animals.clear
+    assert_equal(false, u.animals.any?)
+  end
+
+  def test_multi_save_load
+    u = User.create!(role: 'guest', locale: 'de')
+    u.animals = %i[cat dog]
+    u.save!
+    freshly_loaded_u = User.first
+    assert_equal(Set.new([Animal.find(:cat), Animal.find(:dog)]), freshly_loaded_u.animals)
+  end
+
+  def test_multi_model_readers_and_writers
+    u = User.create!(role: 'guest', locale: 'de')
+    u.cat!
+    u.cat!
+    assert_equal(Set.new([Animal.find(:cat)]), u.animals) # tolerate no duplicate cat
+    assert_equal(true, u.cat?)
+    u.dog!
+    assert_equal(true, u.cat?)
+    assert_equal(true, u.dog?)
+    assert_equal(false, u.horse?)
+  end
+
+  def test_multi_model_scopes
+    u = User.create!(role: 'guest', locale: 'fr', animals: %w[dog cat])
+    v = User.create!(role: 'guest', locale: 'it', animals: %w[dog horse])
+    assert_equal(0, User.rat.count)
+    assert_equal(1, User.cat.count)
+    assert_equal(1, User.horse.count)
+    assert_equal(2, User.dog.count)
+    assert_equal(u.id, User.cat.first.id)
+    assert_equal(v.id, User.horse.first.id)
   end
 end
