@@ -263,3 +263,15 @@ u.roles.clear
 ```
 
 Note that no other methods of Set are overwritten at this point - if you use any other methods mutating the underlying Set, your changes will not be applied.
+
+## Basic rails form for a collection of Anchormodels
+
+```erb
+<%= form_with(model: user) do |form| %>
+  <%# ... %>
+  <%= form.collection_select :role, Role.all, :key, :label, multiple: true %>
+  <%# ... %>
+<% end %>
+```
+
+If you get an error due to unpermitted params, make sure, you are allowing array-style parameters: `params.require(:user).permit(roles: [])`
