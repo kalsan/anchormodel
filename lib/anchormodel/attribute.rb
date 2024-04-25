@@ -10,10 +10,16 @@ class Anchormodel::Attribute
   # @param attribute_name [String,Symbol] The name and database column of the attribute
   # @param anchormodel_class [Class] Class of the Anchormodel (omit if attribute `:foo_bar` holds an `FooBar`)
   # @param optional [Boolean] If true, a presence validation is added to the model.
-  def initialize(model_class, attribute_name, anchormodel_class = nil, optional = false)
+  # @param multiple [Boolean] If true, this attribute holds multiple anchormodels.
+  def initialize(model_class, attribute_name, anchormodel_class = nil, optional = false, multiple = false)
     @model_class = model_class
     @attribute_name = attribute_name.to_sym
     @anchormodel_class = anchormodel_class
     @optional = optional
+    @multiple = multiple
+  end
+
+  def multiple?
+    @multiple
   end
 end

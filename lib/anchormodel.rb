@@ -79,6 +79,7 @@ end
 
 require 'anchormodel/util'
 require 'anchormodel/active_model_type_value_single'
+require 'anchormodel/active_model_type_value_multi'
 require 'anchormodel/attribute'
 require 'anchormodel/model_mixin'
 require 'anchormodel/version'

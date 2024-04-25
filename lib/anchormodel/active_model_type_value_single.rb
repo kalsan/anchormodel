@@ -1,5 +1,7 @@
 # @see https://www.rubydoc.info/docs/rails/ActiveModel/Type/Value
 class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
+  attr_reader :attribute
+
   def initialize(attribute)
     super()
     @attribute = attribute
@@ -9,14 +11,14 @@ class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
     :anchormodel
   end
 
-  # This converts an Anchormodel instance to string for DB
+  # This converts DB or input to an Anchormodel instance
   def cast(value)
     value = value.presence
     return value if value.is_a?(@attribute.anchormodel_class)
     return @attribute.anchormodel_class.find(value)
   end
 
-  # This converts DB or input to an Anchormodel instance
+  # This converts an Anchormodel instance to string for DB
   def serialize(value)
     value = value.presence
     return case value
