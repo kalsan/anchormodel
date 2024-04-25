@@ -1,7 +1,7 @@
 class Anchormodel::ActiveModelTypeValueMulti < Anchormodel::ActiveModelTypeValueSingle
   # This converts DB or input to an Anchormodel instance
   def cast(values)
-    return values.split(',').map { |value| super(value) }.compact
+    return values.split(',').map { |value| super(value) }.compact.to_set
   end
 
   # This converts an Anchormodel instance to string for DB
