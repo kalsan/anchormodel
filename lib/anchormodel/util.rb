@@ -22,7 +22,7 @@ module Anchormodel::Util
     optional = true if multiple
     anchormodel_class ||= attribute_name.to_s.classify.constantize
     attribute_name = attribute_name.to_sym
-    attribute = Anchormodel::Attribute.new(self, attribute_name, anchormodel_class, optional, multiple)
+    attribute = Anchormodel::Attribute.new(model_class, attribute_name, anchormodel_class, optional, multiple)
 
     # Mass configurations if model_methods was specfied
     unless model_methods.nil?
