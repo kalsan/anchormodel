@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_230_124_084_241) do
+ActiveRecord::Schema[7.0].define(version: 20_240_425_182_000) do
   create_table 'users', force: :cascade do |t|
     t.string 'role'
     t.string 'locale'
@@ -18,5 +18,6 @@ ActiveRecord::Schema[7.0].define(version: 20_230_124_084_241) do
     t.datetime 'updated_at', null: false
     t.string 'secondary_role'
     t.string 'preferred_locale', default: 'en', null: false
+    t.string 'animals', default: '', null: false
   end
 end

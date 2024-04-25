@@ -21,10 +21,6 @@ class UserTest < Minitest::Test
     )
   end
 
-  def test_missing_key
-    assert_raises { Role.find(:does_not_exist) }
-  end
-
   def test_basic_setters_and_getters
     u = User.create!(role: 'guest', locale: 'de') # String assignment
     assert_equal Role.find(:guest), u.role
@@ -55,11 +51,6 @@ class UserTest < Minitest::Test
     assert_equal(1, Role.find(:moderator) <=> Role.find(:guest))
     assert_equal(0, Role.find(:moderator) <=> Role.find('moderator'))
     assert Role.find(:moderator) < Role.find(:admin)
-  end
-
-  def test_presence_validation
-    valentine = User.new
-    assert_raises(ActiveRecord::RecordInvalid) { valentine.save! }
   end
 
   def test_alternative_column_name
@@ -119,6 +110,19 @@ class UserTest < Minitest::Test
     assert_nil u.secondary_role
   end
 
+  ###---
+  # Testing failures
+  ###---
+
+  def test_presence_validation
+    valentine = User.new
+    assert_raises(ActiveRecord::RecordInvalid) { valentine.save! }
+  end
+
+  def test_missing_key
+    assert_raises { Role.find(:does_not_exist) }
+  end
+
   # Attempting to create a model with an invalid constant name should fail
   def test_invalid_key_update
     assert_raises(RuntimeError) { User.create!(role: :admin, locale: :de, preferred_locale: :invalid) }
@@ -136,5 +140,14 @@ class UserTest < Minitest::Test
     SQL
     ActiveRecord::Base.connection.execute(sql)
     assert_raises(RuntimeError) { User.first.role }
+  end
+
+  ###---
+  # Testing multiple anchormodel associations
+  ###---
+
+  def test_multi_basics
+    u = User.create!(role: 'guest', locale: 'de')
+    assert_equal(Set.new, u.animals)
   end
 end
