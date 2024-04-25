@@ -11,8 +11,10 @@ class Anchormodel::ActiveModelTypeValueMulti < Anchormodel::ActiveModelTypeValue
              values.map { |value| super(value) }.compact.join(',')
            when String
              values
+           when nil
+             ''
            else
-             fail "Attempt to set #{@attribute.attribute_name} to unsupported type #{value.class}"
+             fail "Attempt to set #{@attribute.attribute_name} to unsupported type #{values.class}"
            end
   end
 
