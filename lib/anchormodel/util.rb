@@ -49,12 +49,31 @@ module Anchormodel::Util
 
       # If this attribute holds multiple anchormodels (`belongs_to_anchormodels`), patch the Array before returning in order to implement collection modifiers:
       if multiple
-        model = self # fetching the model in order to pass it to the implementation of << via reflection to make it available for storage
-        result.define_singleton_method('<<') do |value_to_add|
+        model = self # fetching the model in order to pass it to the implementation of the following via reflection to make it available for storage
+
+        # Adding
+        result.define_singleton_method('add') do |value_to_add|
           super(value_to_add)
           model.write_attribute(attribute_name, active_model_type_value.serialize(self))
           next self
         end
+        result.define_singleton_method('<<') { |value_to_add| add(value_to_add) }
+
+        # Deleting
+        result.define_singleton_method('delete') do |value_to_delete|
+          super(value_to_delete)
+          model.write_attribute(attribute_name, active_model_type_value.serialize(self))
+          next self
+        end
+
+        # Clearing
+        result.define_singleton_method('clear') do
+          super()
+          model.write_attribute(attribute_name, active_model_type_value.serialize(self))
+          next self
+        end
+
+        # In the future, further methods could be supported. e.g. delete_if, subtract etc.
       end
 
       return result
