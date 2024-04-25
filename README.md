@@ -275,3 +275,30 @@ Note that no other methods of Set are overwritten at this point - if you use any
 ```
 
 If you get an error due to unpermitted params, make sure, you are allowing array-style parameters: `params.require(:user).permit(roles: [])`
+
+## SimpleForm for a collection of Anchormodels
+
+Anchormodel's [simple_form](https://github.com/heartcombo/simple_form) support also includes collections of Anchormodels.
+
+Just like in the single Anchormodel implementation, a select input can be provided with:
+
+```erb
+<%= simple_form_for user do |f| %>
+  <%# ... %>
+  <%= f.input :role %>
+  <%# ... %>
+<% end %>
+```
+
+The input figures out automatically that it is operating on a collection, so the form code is the same as for a single Anchormodel.
+
+However, radio buttons are unsuitable for collections, so use check boxes instead:
+
+
+```erb
+<%= simple_form_for user do |f| %>
+  <%# ... %>
+  <%= f.input :role, as: :anchormodel_check_boxes %>
+  <%# ... %>
+<% end %>
+```
