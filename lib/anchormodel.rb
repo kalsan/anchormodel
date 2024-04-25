@@ -25,6 +25,11 @@ class Anchormodel
     entries_list
   end
 
+  # Returns an array of tuples [label, key] suitable for passing as a collection to some form input helpers
+  def self.form_collection
+    entries_list.map { |el| [el.label, el.key.to_s] }
+  end
+
   # Retrieves a particular value given the key. Fails if not found.
   # @param key [String,Symbol] The key of the value that should be retrieved.
   def self.find(key)
