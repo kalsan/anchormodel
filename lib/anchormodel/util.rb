@@ -49,13 +49,11 @@ module Anchormodel::Util
 
       # If this attribute holds multiple anchormodels (`belongs_to_anchormodels`), patch the Array before returning in order to implement collection modifiers:
       if multiple
-        model = self # TODO: this can likely be refactored away (see below)
+        model = self # fetching the model in order to pass it to the implementation of << via reflection to make it available for storage
         result.define_singleton_method('<<') do |value_to_add|
-          # TODO: Use self instead
-          current_list = active_model_type_value.deserialize(model.read_attribute_before_type_cast(attribute_name))
-          current_list << value_to_add
-          model.write_attribute(attribute_name, active_model_type_value.serialize(current_list))
-          next current_list
+          super(value_to_add)
+          model.write_attribute(attribute_name, active_model_type_value.serialize(self))
+          next self
         end
       end
 
@@ -96,7 +94,7 @@ module Anchormodel::Util
         end
         model_class.define_method(:"#{entry.key}!") do
           if multiple
-            # TODO
+            public_send(attribute_name.to_s) << entry
           else
             public_send(:"#{attribute_name}=", entry)
           end
