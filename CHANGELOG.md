@@ -1,3 +1,7 @@
+# unreleased (25.04.2024)
+
+- Add support for multiple anchormodels (`belongs_to_anchormodels`)
+
 # 0.1.5 (24.04.2024)
 
 - Enhance documentation

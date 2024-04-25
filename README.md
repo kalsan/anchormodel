@@ -223,6 +223,43 @@ If you want to have multiple attributes in the same model pointing to the same A
 
 ```ruby
 # app/models/user.rb
-  belongs_to_anchormodel :role
-  belongs_to_anchormodel :secondary_role, Role, model_methods: false
+belongs_to_anchormodel :role
+belongs_to_anchormodel :secondary_role, Role, model_methods: false
 ```
+
+# Attaching multiple Anchormodels to an attribute (similar to a has_many collection)
+
+Collections of Anchormodels are supported. Assuming that your `User` can have multiple `Role` anchormodels, your code can look as follows:
+
+```ruby
+# app/models/user.rb
+belongs_to_anchormodels :roles
+```
+
+The method is deliberately called `belongs_to...` and not `has_many...` in order to indicate that the key is stored in a column of the model in which you are calling it. The rule of thumb for using a collection of Anchormodels is:
+
+- Your column should be of type `string`, just like with the singular `belongs_to_anchormodel`.
+- Anchormodels will be stored in string form, separated by the `,` character
+- When reading the attribute, you will get a `Set`, thus duplicates are avoided.
+
+Example usage for a User model with multiple roles as shown above:
+
+```ruby
+u = User.first
+u.roles = %i[moderator admin] # this will replace the user's roles by the two specified
+u.roles # this will return a set of two Role Anchormodel instances, moderator and role
+u.guest! # this will add the role `guest` to the user's roles
+u.guest? # this will query whether the role `guest` is part of the user's roles
+User.moderator # This will return all users that have the moderator role as part of their roles
+```
+
+For modifying a collection of Anchormodels, the following methods are implemented, the first three accepting a String, Symbol or Anchormodel:
+
+```ruby
+u.roles.add(:moderator) # same as u.moderator!
+u.roles << :moderator # alias of add
+u.roles.delete(:moderator)
+u.roles.clear
+```
+
+Note that no other methods of Set are overwritten at this point - if you use any other methods mutating the underlying Set, your changes will not be applied.
