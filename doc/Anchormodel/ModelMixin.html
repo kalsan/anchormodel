@@ -6,7 +6,7 @@
 <title>
   Module: Anchormodel::ModelMixin
   
-    &mdash; Documentation by YARD 0.9.28
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -138,6 +138,30 @@
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#belongs_to_anchormodels-class_method" title="belongs_to_anchormodels (class method)">.<strong>belongs_to_anchormodels</strong>(*args, **kwargs)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Creates an attribute linking to an array of Anchormodels.</p>
+</div></span>
+  
+</li>
+
+      
     </ul>
   
 
@@ -196,14 +220,62 @@
 </table>
 </div>
     
+      <div class="method_details ">
+  <h3 class="signature " id="belongs_to_anchormodels-class_method">
+  
+    .<strong>belongs_to_anchormodels</strong>(*args, **kwargs)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Creates an attribute linking to an array of Anchormodels. The attribute should be present in the DB and the column should be named the singular of <code>attribute_name</code>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li>Parameters</li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+21
+22
+23</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/model_mixin.rb', line 21</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_belongs_to_anchormodels'>belongs_to_anchormodels</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Util.html" title="Anchormodel::Util (module)">Util</a></span></span><span class='period'>.</span><span class='id identifier rubyid_install_methods_in_model'><span class='object_link'><a href="Util.html#install_methods_in_model-class_method" title="Anchormodel::Util.install_methods_in_model (method)">install_methods_in_model</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='comma'>,</span> <span class='label'>multiple:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
 </div>
 
       <div id="footer">
-  Generated on Wed Apr 24 17:01:49 2024 by
+  Generated on Sat Apr 27 10:18:33 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.2.2).
+  0.9.34 (ruby-3.2.2).
 </div>
 
     </div>

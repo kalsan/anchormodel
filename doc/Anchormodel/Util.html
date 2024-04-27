@@ -6,7 +6,7 @@
 <title>
   Module: Anchormodel::Util
   
-    &mdash; Documentation by YARD 0.9.28
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -112,7 +112,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#install_methods_in_model-class_method" title="install_methods_in_model (class method)">.<strong>install_methods_in_model</strong>(model_class, attribute_name, anchormodel_class = nil, optional: false, model_readers: true, model_writers: true, model_scopes: true, model_methods: nil)  &#x21d2; Object </a>
+      <a href="#install_methods_in_model-class_method" title="install_methods_in_model (class method)">.<strong>install_methods_in_model</strong>(model_class, attribute_name, anchormodel_class = nil, optional: false, multiple: false, model_readers: true, model_writers: true, model_scopes: true, model_methods: nil)  &#x21d2; Object </a>
     
 
     
@@ -145,7 +145,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="install_methods_in_model-class_method">
   
-    .<strong>install_methods_in_model</strong>(model_class, attribute_name, anchormodel_class = nil, optional: false, model_readers: true, model_writers: true, model_scopes: true, model_methods: nil)  &#x21d2; <tt>Object</tt> 
+    .<strong>install_methods_in_model</strong>(model_class, attribute_name, anchormodel_class = nil, optional: false, multiple: false, model_readers: true, model_writers: true, model_scopes: true, model_methods: nil)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -226,7 +226,25 @@
       
         &mdash;
         <div class='inline'>
-<p>If false, a presence validation is added to the model.</p>
+<p>If false, a presence validation is added to the model. Forced to true if multiple is true.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>multiple</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Internal only. Distinguishes between <code>belongs_to_anchormodel</code> and <code>belongs_to_anchormodels</code>.</p>
 </div>
       
     </li>
@@ -312,7 +330,6 @@
       <pre class="lines">
 
 
-13
 14
 15
 16
@@ -391,21 +408,73 @@
 89
 90
 91
-92</pre>
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/util.rb', line 13</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/util.rb', line 14</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_install_methods_in_model'>install_methods_in_model</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='comma'>,</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span>
                                   <span class='label'>optional:</span> <span class='kw'>false</span><span class='comma'>,</span>
+                                  <span class='label'>multiple:</span> <span class='kw'>false</span><span class='comma'>,</span>
                                   <span class='label'>model_readers:</span> <span class='kw'>true</span><span class='comma'>,</span>
                                   <span class='label'>model_writers:</span> <span class='kw'>true</span><span class='comma'>,</span>
                                   <span class='label'>model_scopes:</span> <span class='kw'>true</span><span class='comma'>,</span>
                                   <span class='label'>model_methods:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
 
+  <span class='id identifier rubyid_optional'>optional</span> <span class='op'>=</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_multiple'>multiple</span>
   <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span> <span class='op'>||=</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_classify'>classify</span><span class='period'>.</span><span class='id identifier rubyid_constantize'>constantize</span>
   <span class='id identifier rubyid_attribute_name'>attribute_name</span> <span class='op'>=</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
-  <span class='id identifier rubyid_attribute'>attribute</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Attribute.html" title="Anchormodel::Attribute (class)">Attribute</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Attribute.html#initialize-instance_method" title="Anchormodel::Attribute#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span><span class='comma'>,</span> <span class='id identifier rubyid_optional'>optional</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_attribute'>attribute</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Attribute.html" title="Anchormodel::Attribute (class)">Attribute</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Attribute.html#initialize-instance_method" title="Anchormodel::Attribute#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='comma'>,</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span><span class='comma'>,</span> <span class='id identifier rubyid_optional'>optional</span><span class='comma'>,</span> <span class='id identifier rubyid_multiple'>multiple</span><span class='rparen'>)</span>
 
   <span class='comment'># Mass configurations if model_methods was specfied
 </span>  <span class='kw'>unless</span> <span class='id identifier rubyid_model_methods'>model_methods</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -424,11 +493,43 @@
 
   <span class='comment'># Make casting work
 </span>  <span class='comment'># Define serializer/deserializer
-</span>  <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="ActiveModelTypeValueSingle.html" title="Anchormodel::ActiveModelTypeValueSingle (class)">ActiveModelTypeValueSingle</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="ActiveModelTypeValueSingle.html#initialize-instance_method" title="Anchormodel::ActiveModelTypeValueSingle#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_attribute'>attribute</span><span class='rparen'>)</span>
+</span>  <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_multiple'>multiple</span> <span class='op'>?</span> <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="ActiveModelTypeValueMulti.html" title="Anchormodel::ActiveModelTypeValueMulti (class)">ActiveModelTypeValueMulti</a></span></span> <span class='op'>:</span> <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="ActiveModelTypeValueSingle.html" title="Anchormodel::ActiveModelTypeValueSingle (class)">ActiveModelTypeValueSingle</a></span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute'>attribute</span><span class='rparen'>)</span>
 
   <span class='comment'># Overwrite reader to force building anchors at every retrieval
 </span>  <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_define_method'>define_method</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> <span class='kw'>do</span>
-    <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span><span class='period'>.</span><span class='id identifier rubyid_deserialize'>deserialize</span><span class='lparen'>(</span><span class='id identifier rubyid_read_attribute_before_type_cast'>read_attribute_before_type_cast</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span><span class='period'>.</span><span class='id identifier rubyid_deserialize'>deserialize</span><span class='lparen'>(</span><span class='id identifier rubyid_read_attribute_before_type_cast'>read_attribute_before_type_cast</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='rparen'>)</span><span class='rparen'>)</span>
+
+    <span class='comment'># If this attribute holds multiple anchormodels (`belongs_to_anchormodels`), patch the Array before returning in order to implement collection modifiers:
+</span>    <span class='kw'>if</span> <span class='id identifier rubyid_multiple'>multiple</span>
+      <span class='id identifier rubyid_model'>model</span> <span class='op'>=</span> <span class='kw'>self</span> <span class='comment'># fetching the model in order to pass it to the implementation of the following via reflection to make it available for storage
+</span>      <span class='id identifier rubyid_single_tv'>single_tv</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="ActiveModelTypeValueSingle.html" title="Anchormodel::ActiveModelTypeValueSingle (class)">ActiveModelTypeValueSingle</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="ActiveModelTypeValueSingle.html#initialize-instance_method" title="Anchormodel::ActiveModelTypeValueSingle#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_attribute'>attribute</span><span class='rparen'>)</span> <span class='comment'># Used for casting inputs to properly compare them to the set.
+</span>
+      <span class='comment'># Adding
+</span>      <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_define_singleton_method'>define_singleton_method</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>add</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_value_to_add'>value_to_add</span><span class='op'>|</span>
+        <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_single_tv'>single_tv</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_value_to_add'>value_to_add</span><span class='rparen'>)</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_model'>model</span><span class='period'>.</span><span class='id identifier rubyid_write_attribute'>write_attribute</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span><span class='period'>.</span><span class='id identifier rubyid_serialize'>serialize</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span><span class='rparen'>)</span>
+        <span class='kw'>next</span> <span class='kw'>self</span>
+      <span class='kw'>end</span>
+      <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_define_singleton_method'>define_singleton_method</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>&lt;&lt;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value_to_add'>value_to_add</span><span class='op'>|</span> <span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='id identifier rubyid_single_tv'>single_tv</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_value_to_add'>value_to_add</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+
+      <span class='comment'># Deleting
+</span>      <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_define_singleton_method'>define_singleton_method</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>delete</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_value_to_delete'>value_to_delete</span><span class='op'>|</span>
+        <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_single_tv'>single_tv</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_value_to_delete'>value_to_delete</span><span class='rparen'>)</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_model'>model</span><span class='period'>.</span><span class='id identifier rubyid_write_attribute'>write_attribute</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span><span class='period'>.</span><span class='id identifier rubyid_serialize'>serialize</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span><span class='rparen'>)</span>
+        <span class='kw'>next</span> <span class='kw'>self</span>
+      <span class='kw'>end</span>
+
+      <span class='comment'># Clearing
+</span>      <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_define_singleton_method'>define_singleton_method</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>clear</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+        <span class='kw'>super</span><span class='lparen'>(</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_model'>model</span><span class='period'>.</span><span class='id identifier rubyid_write_attribute'>write_attribute</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span><span class='period'>.</span><span class='id identifier rubyid_serialize'>serialize</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span><span class='rparen'>)</span>
+        <span class='kw'>next</span> <span class='kw'>self</span>
+      <span class='kw'>end</span>
+
+      <span class='comment'># In the future, further methods could be supported. e.g. delete_if, subtract etc.
+</span>    <span class='kw'>end</span>
+
+    <span class='kw'>return</span> <span class='id identifier rubyid_result'>result</span>
   <span class='kw'>end</span>
 
   <span class='comment'># Override writer to fail early when an invalid target value is specified
@@ -447,7 +548,11 @@
         <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Anchormodel reader </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>? already defined for </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='embexpr_end'>}</span><span class='tstring_content'>, add `model_readers: false` to `belongs_to_anchormodel :</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>`.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
       <span class='kw'>end</span>
       <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_define_method'>define_method</span><span class='lparen'>(</span><span class='symbol'>:&quot;#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>?</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
-        <span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='id identifier rubyid_entry'>entry</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_multiple'>multiple</span>
+          <span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_entry'>entry</span><span class='rparen'>)</span>
+        <span class='kw'>else</span>
+          <span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='id identifier rubyid_entry'>entry</span>
+        <span class='kw'>end</span>
       <span class='kw'>end</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
@@ -460,7 +565,11 @@
         <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Anchormodel writer </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>! already defined for </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='embexpr_end'>}</span><span class='tstring_content'>, add `model_writers: false` to `belongs_to_anchormodel :</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>`.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
       <span class='kw'>end</span>
       <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_define_method'>define_method</span><span class='lparen'>(</span><span class='symbol'>:&quot;#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>!</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
-        <span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='symbol'>:&quot;#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>=</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_entry'>entry</span><span class='rparen'>)</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_multiple'>multiple</span>
+          <span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_entry'>entry</span>
+        <span class='kw'>else</span>
+          <span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='symbol'>:&quot;#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>=</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_entry'>entry</span><span class='rparen'>)</span>
+        <span class='kw'>end</span>
       <span class='kw'>end</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
@@ -472,7 +581,14 @@
       <span class='kw'>if</span> <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
         <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Anchormodel scope </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'> already defined for </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='embexpr_end'>}</span><span class='tstring_content'>, add `model_scopes: false` to `belongs_to_anchormodel :</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>`.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
       <span class='kw'>end</span>
-      <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_scope'>scope</span><span class='lparen'>(</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tlambda'>-&gt;</span> <span class='tlambeg'>{</span> <span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_multiple'>multiple</span>
+        <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_scope'>scope</span><span class='lparen'>(</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_lambda'>lambda</span> <span class='lbrace'>{</span>
+                                       <span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> LIKE ? OR </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> LIKE ? OR </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> LIKE ? OR </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> LIKE ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+                                             <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>,%</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>,%</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
+                                     <span class='rbrace'>}</span><span class='rparen'>)</span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_scope'>scope</span><span class='lparen'>(</span><span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tlambda'>-&gt;</span> <span class='tlambeg'>{</span> <span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_entry'>entry</span><span class='period'>.</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
@@ -486,9 +602,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Apr 24 17:01:49 2024 by
+  Generated on Sat Apr 27 10:18:33 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.2.2).
+  0.9.34 (ruby-3.2.2).
 </div>
 
     </div>

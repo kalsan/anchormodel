@@ -6,7 +6,7 @@
 <title>
   Module: Anchormodel::SimpleFormInputs::Helpers::AnchormodelInputsCommon
   
-    &mdash; Documentation by YARD 0.9.28
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -76,7 +76,7 @@
   
   <dl>
     <dt>Included in:</dt>
-    <dd><span class='object_link'><a href="../../../AnchormodelInput.html" title="AnchormodelInput (class)">AnchormodelInput</a></span>, <span class='object_link'><a href="../../../AnchormodelRadioButtonsInput.html" title="AnchormodelRadioButtonsInput (class)">AnchormodelRadioButtonsInput</a></span></dd>
+    <dd><span class='object_link'><a href="../../../AnchormodelCheckBoxesInput.html" title="AnchormodelCheckBoxesInput (class)">AnchormodelCheckBoxesInput</a></span>, <span class='object_link'><a href="../../../AnchormodelInput.html" title="AnchormodelInput (class)">AnchormodelInput</a></span>, <span class='object_link'><a href="../../../AnchormodelRadioButtonsInput.html" title="AnchormodelRadioButtonsInput (class)">AnchormodelRadioButtonsInput</a></span></dd>
   </dl>
   
 
@@ -200,7 +200,12 @@
 35
 36
 37
-38</pre>
+38
+39
+40
+41
+42
+43</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/anchormodel/simple_form_inputs/helpers/anchormodel_inputs_common.rb', line 5</span>
@@ -217,20 +222,25 @@ did you `include Anchormodel::ModelMixin` in your `application_record.rb`? Affec
 Affected object: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_am_class'>am_class</span> <span class='op'>=</span> <span class='id identifier rubyid_am_attr'>am_attr</span><span class='period'>.</span><span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span>
-
+  <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:multiple</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_am_attr'>am_attr</span><span class='period'>.</span><span class='id identifier rubyid_multiple?'>multiple?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:multiple</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='kw'>false</span> <span class='comment'># allow overriding
+</span>
   <span class='comment'># Attempt to read selected key from html input options &quot;value&quot;, as the caller might not know that this is a select.
 </span>  <span class='id identifier rubyid_selected_key'>selected_key</span> <span class='op'>=</span> <span class='id identifier rubyid_input_options'>input_options</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_selected_key'>selected_key</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_object'>object</span>
     <span class='comment'># No selected key override present and a model is present, use the model to find out what to select.
 </span>    <span class='id identifier rubyid_selected_am'>selected_am</span> <span class='op'>=</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='ivar'>@attribute_name</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_selected_key'>selected_key</span> <span class='op'>=</span> <span class='id identifier rubyid_selected_am'>selected_am</span><span class='op'>&amp;.</span><span class='id identifier rubyid_key'>key</span> <span class='op'>||</span> <span class='id identifier rubyid_am_class'>am_class</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_am_attr'>am_attr</span><span class='period'>.</span><span class='id identifier rubyid_multiple?'>multiple?</span>
+      <span class='id identifier rubyid_selected_key'>selected_key</span> <span class='op'>=</span> <span class='id identifier rubyid_selected_am'>selected_am</span><span class='op'>&amp;.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:key</span><span class='rparen'>)</span><span class='op'>&amp;.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_selected_key'>selected_key</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_selected_am'>selected_am</span><span class='op'>&amp;.</span><span class='id identifier rubyid_key'>key</span> <span class='op'>||</span> <span class='id identifier rubyid_am_class'>am_class</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+    <span class='kw'>end</span>
   <span class='kw'>end</span>
 
   <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_deep_merge!'>deep_merge!</span><span class='lparen'>(</span>
     <span class='label'>label_method:</span>  <span class='symbol'>:first</span><span class='comma'>,</span>
     <span class='label'>value_method:</span>  <span class='symbol'>:second</span><span class='comma'>,</span>
-    <span class='id identifier rubyid_sf_selection_key'>sf_selection_key</span> <span class='op'>=&gt;</span>       <span class='id identifier rubyid_selected_key'>selected_key</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span>
-    <span class='label'>include_blank:</span> <span class='id identifier rubyid_am_attr'>am_attr</span><span class='period'>.</span><span class='id identifier rubyid_optional'>optional</span>
+    <span class='id identifier rubyid_sf_selection_key'>sf_selection_key</span> <span class='op'>=&gt;</span>       <span class='id identifier rubyid_selected_key'>selected_key</span><span class='comma'>,</span>
+    <span class='label'>include_blank:</span> <span class='op'>!</span><span class='id identifier rubyid_am_attr'>am_attr</span><span class='period'>.</span><span class='id identifier rubyid_multiple?'>multiple?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_am_attr'>am_attr</span><span class='period'>.</span><span class='id identifier rubyid_optional'>optional</span>
   <span class='rparen'>)</span>
 
   <span class='ivar'>@collection</span> <span class='op'>=</span> <span class='id identifier rubyid_collect'>collect</span><span class='lparen'>(</span><span class='id identifier rubyid_am_class'>am_class</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='rparen'>)</span>
@@ -249,9 +259,9 @@ Affected object: </span><span class='embexpr_beg'>#{</span><span class='id ident
 </div>
 
       <div id="footer">
-  Generated on Wed Apr 24 17:01:49 2024 by
+  Generated on Sat Apr 27 10:18:33 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.2.2).
+  0.9.34 (ruby-3.2.2).
 </div>
 
     </div>

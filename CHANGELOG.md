@@ -1,4 +1,4 @@
-# unreleased (27.04.2024)
+# 0.2.0 (27.04.2024)
 
 - Add support for multiple anchormodels (`belongs_to_anchormodels`)
 - Implement YourAnchormodelclass.form_collection

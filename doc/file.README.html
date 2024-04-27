@@ -6,7 +6,7 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.28
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -261,15 +261,87 @@
 <p>If you want to have multiple attributes in the same model pointing to the same Anchormodel, you need to disable <code>model_methods</code> for at least one of them (otherwise the model methods will clash in your model class):</p>
 
 <pre class="code ruby"><code class="ruby"><span class='comment'># app/models/user.rb
-</span>  <span class='id identifier rubyid_belongs_to_anchormodel'>belongs_to_anchormodel</span> <span class='symbol'>:role</span>
-  <span class='id identifier rubyid_belongs_to_anchormodel'>belongs_to_anchormodel</span> <span class='symbol'>:secondary_role</span><span class='comma'>,</span> <span class='const'>Role</span><span class='comma'>,</span> <span class='label'>model_methods:</span> <span class='kw'>false</span>
+</span><span class='id identifier rubyid_belongs_to_anchormodel'>belongs_to_anchormodel</span> <span class='symbol'>:role</span>
+<span class='id identifier rubyid_belongs_to_anchormodel'>belongs_to_anchormodel</span> <span class='symbol'>:secondary_role</span><span class='comma'>,</span> <span class='const'>Role</span><span class='comma'>,</span> <span class='label'>model_methods:</span> <span class='kw'>false</span>
+</code></pre>
+
+<h1 id="label-Attaching+multiple+Anchormodels+to+an+attribute+-28similar+to+a+has_many+collection-29">Attaching multiple Anchormodels to an attribute (similar to a has_many collection)</h1>
+
+<p>Collections of Anchormodels are supported. Assuming that your <code>User</code> can have multiple <code>Role</code> anchormodels, your code can look as follows:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># app/models/user.rb
+</span><span class='id identifier rubyid_belongs_to_anchormodels'>belongs_to_anchormodels</span> <span class='symbol'>:roles</span>
+</code></pre>
+
+<p>The method is deliberately called <code>belongs_to...</code> and not <code>has_many...</code> in order to indicate that the key is stored in a column of the model in which you are calling it. The rule of thumb for using a collection of Anchormodels is:</p>
+<ul><li>
+<p>Your column should be of type <code>string</code>, just like with the singular <code>belongs_to_anchormodel</code>.</p>
+</li><li>
+<p>Anchormodels will be stored in string form, separated by the <code>,</code> character</p>
+</li><li>
+<p>When reading the attribute, you will get a <code>Set</code>, thus duplicates are avoided.</p>
+</li></ul>
+
+<p>Example usage for a User model with multiple roles as shown above:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_u'>u</span> <span class='op'>=</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+<span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_roles'>roles</span> <span class='op'>=</span> <span class='qsymbols_beg'>%i[</span><span class='tstring_content'>moderator</span><span class='words_sep'> </span><span class='tstring_content'>admin</span><span class='tstring_end'>]</span></span> <span class='comment'># this will replace the user&#39;s roles by the two specified
+</span><span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_roles'>roles</span> <span class='comment'># this will return a set of two Role Anchormodel instances, moderator and role
+</span><span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_guest!'>guest!</span> <span class='comment'># this will add the role `guest` to the user&#39;s roles
+</span><span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_guest?'>guest?</span> <span class='comment'># this will query whether the role `guest` is part of the user&#39;s roles
+</span><span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_moderator'>moderator</span> <span class='comment'># This will return all users that have the moderator role as part of their roles
+</span></code></pre>
+
+<p>For modifying a collection of Anchormodels, the following methods are implemented, the first three accepting a String, Symbol or Anchormodel:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_roles'>roles</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='symbol'>:moderator</span><span class='rparen'>)</span> <span class='comment'># same as u.moderator!
+</span><span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_roles'>roles</span> <span class='op'>&lt;&lt;</span> <span class='symbol'>:moderator</span> <span class='comment'># alias of add
+</span><span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_roles'>roles</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:moderator</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_roles'>roles</span><span class='period'>.</span><span class='id identifier rubyid_clear'>clear</span>
+</code></pre>
+
+<p>Note that no other methods of Set are overwritten at this point - if you use any other methods mutating the underlying Set, your changes will not be applied.</p>
+
+<h2 id="label-Basic+rails+form+for+a+collection+of+Anchormodels">Basic rails form for a collection of Anchormodels</h2>
+
+<pre class="code ruby"><code class="ruby">&lt;%= form_with(model: user) do |form| %&gt;
+  &lt;%# ... %&gt;
+  &lt;%= form.collection_select :role, Role.all, :key, :label, multiple: true %&gt;
+  &lt;%# ... %&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<p>If you get an error due to unpermitted params, make sure, you are allowing array-style parameters: <code>params.require(:user).permit(roles: [])</code></p>
+
+<h2 id="label-SimpleForm+for+a+collection+of+Anchormodels">SimpleForm for a collection of Anchormodels</h2>
+
+<p>Anchormodel’s <a href="https://github.com/heartcombo/simple_form">simple_form</a> support also includes collections of Anchormodels.</p>
+
+<p>Just like in the single Anchormodel implementation, a select input can be provided with:</p>
+
+<pre class="code ruby"><code class="ruby">&lt;%= simple_form_for user do |f| %&gt;
+  &lt;%# ... %&gt;
+  &lt;%= f.input :role %&gt;
+  &lt;%# ... %&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<p>The input figures out automatically that it is operating on a collection, so the form code is the same as for a single Anchormodel.</p>
+
+<p>However, radio buttons are unsuitable for collections, so use check boxes instead:</p>
+
+<pre class="code ruby"><code class="ruby">&lt;%= simple_form_for user do |f| %&gt;
+  &lt;%# ... %&gt;
+  &lt;%= f.input :role, as: :anchormodel_check_boxes %&gt;
+  &lt;%# ... %&gt;
+&lt;% end %&gt;
 </code></pre>
 </div></div>
 
       <div id="footer">
-  Generated on Wed Apr 24 17:01:49 2024 by
+  Generated on Sat Apr 27 10:18:33 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.2.2).
+  0.9.34 (ruby-3.2.2).
 </div>
 
     </div>

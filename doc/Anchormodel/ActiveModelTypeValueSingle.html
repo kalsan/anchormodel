@@ -6,7 +6,7 @@
 <title>
   Class: Anchormodel::ActiveModelTypeValueSingle
   
-    &mdash; Documentation by YARD 0.9.28
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -117,9 +117,45 @@
     
   </ul>
 
+</div><div id="subclasses">
+  <h2>Direct Known Subclasses</h2>
+  <p class="children"><span class='object_link'><a href="ActiveModelTypeValueMulti.html" title="Anchormodel::ActiveModelTypeValueMulti (class)">ActiveModelTypeValueMulti</a></span></p>
 </div>
 
 
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#attribute-instance_method" title="#attribute (instance method)">#<strong>attribute</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+  </ul>
 
 
 
@@ -150,7 +186,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>This converts an Anchormodel instance to string for DB.</p>
+<p>This converts DB or input to an Anchormodel instance.</p>
 </div></span>
   
 </li>
@@ -244,7 +280,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>This converts DB or input to an Anchormodel instance.</p>
+<p>This converts an Anchormodel instance to string for DB.</p>
 </div></span>
   
 </li>
@@ -305,13 +341,13 @@
       <pre class="lines">
 
 
-3
-4
 5
-6</pre>
+6
+7
+8</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 3</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 5</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute'>attribute</span><span class='rparen'>)</span>
   <span class='kw'>super</span><span class='lparen'>(</span><span class='rparen'>)</span>
@@ -323,6 +359,52 @@
 </div>
   
 </div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="attribute-instance_method">
+  
+    #<strong>attribute</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+3
+4
+5</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 3</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_attribute'>attribute</span>
+  <span class='ivar'>@attribute</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
 
 
   <div id="instance_method_details" class="method_details_list">
@@ -341,7 +423,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>This converts an Anchormodel instance to string for DB</p>
+<p>This converts DB or input to an Anchormodel instance</p>
 
 
   </div>
@@ -355,14 +437,14 @@
       <pre class="lines">
 
 
-13
-14
 15
 16
-17</pre>
+17
+18
+19</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 13</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 15</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_presence'>presence</span>
@@ -411,13 +493,13 @@
       <pre class="lines">
 
 
-48
-49
 50
-51</pre>
+51
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_changed_in_place?'>changed_in_place?</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_old_value'>raw_old_value</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_old_value'>old_value</span> <span class='op'>=</span> <span class='id identifier rubyid_deserialize'>deserialize</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_old_value'>raw_old_value</span><span class='rparen'>)</span>
@@ -465,8 +547,6 @@
       <pre class="lines">
 
 
-37
-38
 39
 40
 41
@@ -474,10 +554,12 @@
 43
 44
 45
-46</pre>
+46
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 37</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 39</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_serializable?'>serializable?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>case</span> <span class='id identifier rubyid_value'>value</span>
@@ -506,7 +588,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>This converts DB or input to an Anchormodel instance</p>
+<p>This converts an Anchormodel instance to string for DB</p>
 
 
   </div>
@@ -520,8 +602,6 @@
       <pre class="lines">
 
 
-20
-21
 22
 23
 24
@@ -535,10 +615,12 @@
 32
 33
 34
-35</pre>
+35
+36
+37</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 20</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 22</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_serialize'>serialize</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_presence'>presence</span>
@@ -585,12 +667,12 @@
       <pre class="lines">
 
 
-8
-9
-10</pre>
+10
+11
+12</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 8</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 10</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
   <span class='symbol'>:anchormodel</span>
@@ -605,9 +687,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Apr 24 17:01:49 2024 by
+  Generated on Sat Apr 27 10:18:33 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.2.2).
+  0.9.34 (ruby-3.2.2).
 </div>
 
     </div>
