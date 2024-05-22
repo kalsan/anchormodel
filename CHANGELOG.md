@@ -1,4 +1,4 @@
-# unreleased (22.05.2024)
+# 0.2.1 (22.05.2024)
 
 - Stop enforcing include_blank for SimpleForm, due to https://github.com/heartcombo/simple_form/issues/1427
 
