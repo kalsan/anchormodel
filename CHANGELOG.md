@@ -1,3 +1,7 @@
+# unreleased (22.05.2024)
+
+- Stop enforcing include_blank for SimpleForm, due to https://github.com/heartcombo/simple_form/issues/1427
+
 # 0.2.0 (27.04.2024)
 
 - Add support for multiple anchormodels (`belongs_to_anchormodels`)

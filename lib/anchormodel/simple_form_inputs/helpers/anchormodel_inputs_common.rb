@@ -31,8 +31,7 @@ Affected object: #{object.inspect}")
           options.deep_merge!(
             label_method:  :first,
             value_method:  :second,
-            sf_selection_key =>       selected_key,
-            include_blank: !am_attr.multiple? && am_attr.optional
+            sf_selection_key =>       selected_key
           )
 
           @collection = collect(am_class.all)
