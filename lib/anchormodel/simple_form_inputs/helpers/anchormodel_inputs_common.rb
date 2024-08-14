@@ -3,12 +3,18 @@ class Anchormodel
     module Helpers
       module AnchormodelInputsCommon
         def input(wrapper_options = nil)
-          unless object.respond_to?(:anchormodel_attributes)
-            fail("The form field object does not appear to respond to `anchormodel_attributes`, \
-did you `include Anchormodel::ModelMixin` in your `application_record.rb`? Affected object: #{object.inspect}")
+          if object.present?
+            unless object.respond_to?(:anchormodel_attributes)
+              fail("The form field object does not appear to respond to `anchormodel_attributes`, \
+  did you `include Anchormodel::ModelMixin` in your `application_record.rb`? Affected object: #{object.inspect}")
+            end
+            am_attr = object.anchormodel_attributes[@attribute_name]
+          elsif options.key?(:anchormodel_attribute)
+            am_attr = options.delete(:anchormodel_attribute)
+          else
+            fail(':anchormodel input requires either an object or the input option :anchormodel_attribute, but neither is set.')
           end
 
-          am_attr = object.anchormodel_attributes[@attribute_name]
           unless am_attr
             fail("#{@attribute_name.inspect} does not look like an Anchormodel attribute, is `belongs_to_anchormodel` called in your model? \
 Affected object: #{object.inspect}")
@@ -17,7 +23,7 @@ Affected object: #{object.inspect}")
           options[:multiple] = true if am_attr.multiple? && options[:multiple] != false # allow overriding
 
           # Attempt to read selected key from html input options "value", as the caller might not know that this is a select.
-          selected_key = input_options[:value]
+          selected_key = input_options[:value].presence || options.dig(:input_html, :value)
           if selected_key.blank? && object
             # No selected key override present and a model is present, use the model to find out what to select.
             selected_am = object.send(@attribute_name)
