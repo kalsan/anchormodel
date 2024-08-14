@@ -1,7 +1,8 @@
-# unreleased (14.08.2024)
+# 0.2.2 (14.08.2024)
 
 - Allow passing `anchormodel_attribute` explicitely to `anchormodel` input and enhance error message
 - In `anchormodel` input, fallback to searching selected value in input html options as well
+- Update ruby version to 3.2.2
 
 # 0.2.1 (22.05.2024)
 
