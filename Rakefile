@@ -16,7 +16,7 @@ task :gemspec do
     s.homepage = 'https://github.com/kalsan/anchormodel'
 
     # Dependencies
-    s.add_runtime_dependency 'rails', '~> 7.0'
+    s.add_runtime_dependency 'rails', '>= 7.0'
 
     s.add_development_dependency 'rake', '~> 13.0.6'
     s.add_development_dependency 'pry', '~> 0.14.1'

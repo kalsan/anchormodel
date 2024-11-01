@@ -1,3 +1,7 @@
+# 0.2.3 (01.11.2024)
+
+- Relax Rails dependency
+
 # 0.2.2 (14.08.2024)
 
 - Allow passing `anchormodel_attribute` explicitely to `anchormodel` input and enhance error message
