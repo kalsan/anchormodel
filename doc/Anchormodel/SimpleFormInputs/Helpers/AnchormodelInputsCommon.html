@@ -6,7 +6,7 @@
 <title>
   Module: Anchormodel::SimpleFormInputs::Helpers::AnchormodelInputsCommon
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -204,18 +204,30 @@
 39
 40
 41
-42</pre>
+42
+43
+44
+45
+46
+47
+48</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/anchormodel/simple_form_inputs/helpers/anchormodel_inputs_common.rb', line 5</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_input'>input</span><span class='lparen'>(</span><span class='id identifier rubyid_wrapper_options'>wrapper_options</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>unless</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:anchormodel_attributes</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>The form field object does not appear to respond to `anchormodel_attributes`, \
-did you `include Anchormodel::ModelMixin` in your `application_record.rb`? Affected object: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+    <span class='kw'>unless</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:anchormodel_attributes</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>The form field object does not appear to respond to `anchormodel_attributes`, \
+  did you `include Anchormodel::ModelMixin` in your `application_record.rb`? Affected object: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_am_attr'>am_attr</span> <span class='op'>=</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_anchormodel_attributes'>anchormodel_attributes</span><span class='lbracket'>[</span><span class='ivar'>@attribute_name</span><span class='rbracket'>]</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:anchormodel_attribute</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_am_attr'>am_attr</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:anchormodel_attribute</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:anchormodel input requires either an object or the input option :anchormodel_attribute, but neither is set.</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
-  <span class='id identifier rubyid_am_attr'>am_attr</span> <span class='op'>=</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_anchormodel_attributes'>anchormodel_attributes</span><span class='lbracket'>[</span><span class='ivar'>@attribute_name</span><span class='rbracket'>]</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_am_attr'>am_attr</span>
     <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'> does not look like an Anchormodel attribute, is `belongs_to_anchormodel` called in your model? \
 Affected object: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -224,7 +236,7 @@ Affected object: </span><span class='embexpr_beg'>#{</span><span class='id ident
   <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:multiple</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_am_attr'>am_attr</span><span class='period'>.</span><span class='id identifier rubyid_multiple?'>multiple?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:multiple</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='kw'>false</span> <span class='comment'># allow overriding
 </span>
   <span class='comment'># Attempt to read selected key from html input options &quot;value&quot;, as the caller might not know that this is a select.
-</span>  <span class='id identifier rubyid_selected_key'>selected_key</span> <span class='op'>=</span> <span class='id identifier rubyid_input_options'>input_options</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span>
+</span>  <span class='id identifier rubyid_selected_key'>selected_key</span> <span class='op'>=</span> <span class='id identifier rubyid_input_options'>input_options</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_presence'>presence</span> <span class='op'>||</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_dig'>dig</span><span class='lparen'>(</span><span class='symbol'>:input_html</span><span class='comma'>,</span> <span class='symbol'>:value</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_selected_key'>selected_key</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_object'>object</span>
     <span class='comment'># No selected key override present and a model is present, use the model to find out what to select.
 </span>    <span class='id identifier rubyid_selected_am'>selected_am</span> <span class='op'>=</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='ivar'>@attribute_name</span><span class='rparen'>)</span>
@@ -257,9 +269,9 @@ Affected object: </span><span class='embexpr_beg'>#{</span><span class='id ident
 </div>
 
       <div id="footer">
-  Generated on Wed May 22 11:24:47 2024 by
+  Generated on Fri Nov  1 12:02:06 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.2.2).
+  0.9.37 (ruby-3.3.5).
 </div>
 
     </div>
