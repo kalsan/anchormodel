@@ -25,6 +25,11 @@ class Anchormodel
     entries_list
   end
 
+  # Shorthand to satisfy rubocop
+  def self.first
+    all.first
+  end
+
   # Returns an array of tuples [label, key] suitable for passing as a collection to some form input helpers
   def self.form_collection
     entries_list.map { |el| [el.label, el.key.to_s] }

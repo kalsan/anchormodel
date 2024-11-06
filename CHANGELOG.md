@@ -1,3 +1,7 @@
+# 0.2.4 (06.11.2024)
+
+- Implement `YourConstant.first` as a shorthand for `YourConstant.all.first` to avoid Rubocop problems
+
 # 0.2.3 (01.11.2024)
 
 - Relax Rails dependency
