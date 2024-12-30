@@ -85,6 +85,10 @@ class Anchormodel
   def to_s
     inspect
   end
+
+  def as_json
+    key.to_s
+  end
 end
 
 require 'anchormodel/util'
