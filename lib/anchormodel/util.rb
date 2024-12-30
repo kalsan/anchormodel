@@ -45,7 +45,13 @@ module Anchormodel::Util
 
     # Overwrite reader to force building anchors at every retrieval
     model_class.define_method(attribute_name.to_s) do
-      result = active_model_type_value.deserialize(read_attribute_before_type_cast(attribute_name))
+      # This patch fixes an issue in combination with the active_type gem, causing virtual models to always read nil on anchormodel attributes.
+      raw_data = if defined?(ActiveType::Object) && is_a?(ActiveType::Object)
+                   virtual_attributes[attribute_name.to_s]
+                 else
+                   read_attribute_before_type_cast(attribute_name)
+                 end
+      result = active_model_type_value.deserialize(raw_data)
 
       # If this attribute holds multiple anchormodels (`belongs_to_anchormodels`), patch the Array before returning in order to implement collection modifiers:
       if multiple

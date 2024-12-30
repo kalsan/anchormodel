@@ -1,3 +1,7 @@
+# unreleased
+
+- Fix an issue in combination with the active_type gem, causing virtual models to always read nil on anchormodel attributes
+
 # 0.2.4 (06.11.2024)
 
 - Implement `YourConstant.first` as a shorthand for `YourConstant.all.first` to avoid Rubocop problems
