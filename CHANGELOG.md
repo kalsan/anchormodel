@@ -1,4 +1,4 @@
-# unreleased
+# 0.2.5
 
 - Fix an issue in combination with the active_type gem, causing virtual models to always read nil on anchormodel attributes
 - When serializing an Anchormodel to json, return the key

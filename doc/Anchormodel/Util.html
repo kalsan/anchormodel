@@ -458,7 +458,13 @@
 139
 140
 141
-142</pre>
+142
+143
+144
+145
+146
+147
+148</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/anchormodel/util.rb', line 14</span>
@@ -497,7 +503,13 @@
 
   <span class='comment'># Overwrite reader to force building anchors at every retrieval
 </span>  <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_define_method'>define_method</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> <span class='kw'>do</span>
-    <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span><span class='period'>.</span><span class='id identifier rubyid_deserialize'>deserialize</span><span class='lparen'>(</span><span class='id identifier rubyid_read_attribute_before_type_cast'>read_attribute_before_type_cast</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='comment'># This patch fixes an issue in combination with the active_type gem, causing virtual models to always read nil on anchormodel attributes.
+</span>    <span class='id identifier rubyid_raw_data'>raw_data</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='kw'>defined?</span><span class='lparen'>(</span><span class='const'>ActiveType</span><span class='op'>::</span><span class='const'>Object</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>ActiveType</span><span class='op'>::</span><span class='const'>Object</span><span class='rparen'>)</span>
+                 <span class='id identifier rubyid_virtual_attributes'>virtual_attributes</span><span class='lbracket'>[</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rbracket'>]</span>
+               <span class='kw'>else</span>
+                 <span class='id identifier rubyid_read_attribute_before_type_cast'>read_attribute_before_type_cast</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='rparen'>)</span>
+               <span class='kw'>end</span>
+    <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='id identifier rubyid_active_model_type_value'>active_model_type_value</span><span class='period'>.</span><span class='id identifier rubyid_deserialize'>deserialize</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_data'>raw_data</span><span class='rparen'>)</span>
 
     <span class='comment'># If this attribute holds multiple anchormodels (`belongs_to_anchormodels`), patch the Array before returning in order to implement collection modifiers:
 </span>    <span class='kw'>if</span> <span class='id identifier rubyid_multiple'>multiple</span>
@@ -602,7 +614,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Nov  6 17:50:37 2024 by
+  Generated on Fri Feb 14 13:25:30 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.37 (ruby-3.3.5).
 </div>
