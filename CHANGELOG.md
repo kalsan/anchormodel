@@ -1,3 +1,7 @@
+# unreleased
+
+- Enhance support for custom collections in inputs
+
 # 0.2.5
 
 - Fix an issue in combination with the active_type gem, causing virtual models to always read nil on anchormodel attributes

@@ -40,7 +40,18 @@ Affected object: #{object.inspect}")
             sf_selection_key =>       selected_key
           )
 
-          @collection = collect(am_class.all)
+          if options[:collection]
+            # Case where collection is given as an option consisting of an array of pairs
+            if options[:collection].first.is_a?(Enumerable) && options[:collection].first&.size == 2
+              @collection = options[:collection]
+            else
+              # Case where collection is given as an option consisting of an array of anchormodels
+              @collection = collect(options[:collection])
+            end
+          else
+            # Case where collection is not given
+            @collection = collect(am_class.all)
+          end
 
           before_render_input
 
