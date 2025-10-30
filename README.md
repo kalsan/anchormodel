@@ -21,7 +21,7 @@ Typically, a Rails application consists of three kinds of state:
   However, as users are assigned to roles in the database, roles also need to be
   persisted in the database. This is where Anchormodel comes into play.
 
-## Alternatives coviering the same use case
+## Alternatives covering the same use case
 
 ### Enum
 
