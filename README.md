@@ -64,7 +64,7 @@ This will create `app/anchormodels/role.rb`.
 
 ```ruby
 class Role < Anchormodel
-  # Make <, > etc. based on <=> operator whic hwe will define below
+  # Make <, > etc. based on <=> operator which we will define below
   include Comparable
 
   # Expose the attribute privilege_level
