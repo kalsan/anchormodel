@@ -2,6 +2,7 @@
 
 - Fix typos in doc (thank you Josua!)
 - Explicitely forbid defining the same anchormodel key twice
+- Update Gemfile.lock
 
 # 0.2.6
 
