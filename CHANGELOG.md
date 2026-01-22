@@ -1,4 +1,4 @@
-# unreleased
+# 0.3.0
 
 - Fix typos in doc (thank you Josua!)
 - Explicitely forbid defining the same anchormodel key twice
