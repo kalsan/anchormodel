@@ -1,3 +1,7 @@
+# unreleased
+
+- Explicitely forbid defining the same anchormodel key twice
+
 # 0.2.6
 
 - Enhance support for custom collections in inputs

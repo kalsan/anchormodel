@@ -57,6 +57,7 @@ class Anchormodel
     end
 
     # Register self
+    fail("Duplicate anchor model key #{key.inspect} for #{self.class}.") if entries_hash.key?(key)
     entries_list << self
     entries_hash[key] = self
 
