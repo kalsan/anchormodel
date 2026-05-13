@@ -307,7 +307,30 @@ class UserTest < Minitest::Test
   end
 
   def test_missing_key
-    assert_raises { Role.find(:does_not_exist) }
+    assert_raises(Anchormodel::InvalidKey) { Role.find(:does_not_exist) }
+  end
+
+  # Callers want to `rescue` invalid-key errors specifically without matching
+  # exception message strings. `Anchormodel::InvalidKey` is the dedicated class.
+  def test_invalid_key_error_class
+    # `find` with unknown key
+    assert_raises(Anchormodel::InvalidKey) { Role.find(:nope) }
+
+    # Assignment with unknown key
+    u = User.new(locale: 'de')
+    assert_raises(Anchormodel::InvalidKey) { u.role = :nope }
+
+    # Bulk where with mixed valid/invalid array
+    assert_raises(Anchormodel::InvalidKey) { User.where(role: %w[admin nope]).to_a }
+
+    # Multi attribute assignment with unknown key
+    assert_raises(Anchormodel::InvalidKey) { User.new(role: 'admin', locale: 'de', animals: %w[cat nope]) }
+
+    # Helper scope with unknown key
+    assert_raises(Anchormodel::InvalidKey) { User.with_any_animals(:nope).to_a }
+
+    # InvalidKey must be a StandardError so generic `rescue` catches it
+    assert_operator Anchormodel::InvalidKey, :<, StandardError
   end
 
   # Attempting to create a model with an invalid constant name should fail

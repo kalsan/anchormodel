@@ -39,7 +39,7 @@ class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
     return case value
            when Symbol, String
              unless @attribute.anchormodel_class.valid_keys.include?(value.to_sym)
-               fail("Attempt to set #{@attribute.attribute_name} to unsupported key #{value.inspect}.")
+               raise(Anchormodel::InvalidKey, "Attempt to set #{@attribute.attribute_name} to unsupported key #{value.inspect}.")
              end
              value.to_s
            when @attribute.anchormodel_class

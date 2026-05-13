@@ -35,11 +35,15 @@ class Anchormodel
     entries_list.map { |el| [el.label, el.key.to_s] }
   end
 
+  # Raised when an anchormodel key is unknown to its class.
+  # Subclasses `RuntimeError` so existing `rescue RuntimeError` blocks remain compatible.
+  class InvalidKey < RuntimeError; end
+
   # Retrieves a particular value given the key. Fails if not found.
   # @param key [String,Symbol] The key of the value that should be retrieved.
   def self.find(key)
     return nil if key.nil?
-    return entries_hash[key.to_sym] || fail("Retreived undefined anchor model key #{key.inspect} for #{inspect}.")
+    return entries_hash[key.to_sym] || raise(InvalidKey, "Retrieved undefined anchor model key #{key.inspect} for #{inspect}.")
   end
 
   # Call this initializer directly in your Anchormodel class. To set `@foo=:bar` for anchor `:ter`, use `new(:ter, foo: :bar)`
