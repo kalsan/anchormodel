@@ -30,6 +30,27 @@ class UserTest < Minitest::Test
     assert_equal Locale.find(:en), u.locale
   end
 
+  # `Anchormodel#==` defined class+key equality, but `hash` and `eql?` defaulted to
+  # object identity. Worked in practice only because instances are singletons via
+  # `entries_hash`. Any non-singleton copy (e.g. `dup`, Marshal round-trip, test doubles)
+  # broke `Set`/`Hash` membership and `==` comparison invariants.
+  def test_hash_and_eql_match_equality
+    admin1 = Role.find(:admin)
+    admin2 = admin1.dup
+
+    assert_equal admin1, admin2
+    assert_equal admin1.hash, admin2.hash
+    assert admin1.eql?(admin2)
+    assert admin2.eql?(admin1)
+
+    # Different keys must differ
+    refute_equal admin1.hash, Role.find(:guest).hash # rubocop:disable Rails/RefuteMethods
+
+    # Set/Hash membership now consistent with `==`
+    assert_equal 1, Set.new([admin1, admin2]).size
+    assert_equal 'a', ({ admin1 => 'a' }[admin2])
+  end
+
   def test_comparison
     bob = User.create(locale: :en)
     alice = User.create(locale: :fr)

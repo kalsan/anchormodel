@@ -73,6 +73,11 @@ class Anchormodel
   def ==(other)
     self.class == other.class && key == other.key
   end
+  alias eql? ==
+
+  def hash
+    [self.class, key].hash
+  end
 
   # Returns a Rails label that is compatible with the [Rails FastGettext](https://github.com/grosser/gettext_i18n_rails/) gem.
   def label
