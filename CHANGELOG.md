@@ -10,6 +10,7 @@
 - Introduce `Anchormodel::InvalidKey` exception class for unknown keys (raised from `find`, attribute assignment, and `with_any_<attr>` scopes). Inherits from `RuntimeError` so existing `rescue RuntimeError` blocks remain compatible while allowing narrower `rescue Anchormodel::InvalidKey`
 - Update default ruby version to 3.3.5
 - Improve documentation (yard, inline, readmes) for humans and AI usage
+- Add various examples that proudly show various ways of using anchormodels in practice
 
 # 0.3.1
 

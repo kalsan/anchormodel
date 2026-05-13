@@ -7,6 +7,10 @@ Enums](https://api.rubyonrails.org/v7.0/classes/ActiveRecord/Enum.html). In
 contrast to regular Enums, Anchormodels can hold application logic, making them
 ideal for tying code to database objects.
 
+For a tour of real-world usage patterns — ordered enums with `Comparable`,
+state machines, polymorphic class registries, multi-key collection attributes,
+cross-anchormodel references, and more — see [EXAMPLES.md](EXAMPLES.md).
+
 # Use case
 
 Typically, a Rails application consists of three kinds of state:
