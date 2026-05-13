@@ -5,6 +5,7 @@
 - Fix `Multi#serialize` accepting unvalidated `String` input — invalid keys now raise on assignment instead of being stored verbatim and crashing on the next read
 - Add `with_any_<attr>` / `with_all_<attr>` scopes for `belongs_to_anchormodels` to work around `where(col: array)` not matching CSV-in-column storage
 - Fix `belongs_to_anchormodels` scopes treating `_` / `%` in keys as SQL `LIKE` wildcards — e.g. `:big_cat` no longer cross-matches column values like `"bigXcat,foo"`. Centralizes CSV-contains predicate in `Anchormodel::Util.csv_contains_like` with `ESCAPE '!'`
+- Fix single-value anchormodel attributes silently accepting `Array` assignment (e.g. `u.role = %w[admin guest]`) — now raises immediately. Was a regression from the 0.3.1 `where(col: array)` fix; the Array branch turned out to be dead code since AR's `HomogeneousIn` serializes per element
 
 # 0.3.1
 

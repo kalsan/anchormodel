@@ -20,12 +20,10 @@ class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
 
   # This converts an Anchormodel instance to string for DB
   def serialize(value)
-    return value.map { |v| serialize_scalar(v) } if value.is_a?(Array)
     serialize_scalar(value)
   end
 
   def serializable?(value)
-    return value.all? { |v| scalar_serializable?(v) } if value.is_a?(Array)
     scalar_serializable?(value)
   end
 

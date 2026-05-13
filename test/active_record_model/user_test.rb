@@ -111,17 +111,29 @@ class UserTest < Minitest::Test
     assert_raises(RuntimeError) { User.where(role: %w[admin nope]).to_a }
   end
 
+  # Single-value anchormodel attributes must reject Array assignment with a clear RuntimeError.
+  # Regression: when Array handling was added to `Single#serialize` for the `where(col: array)`
+  # fix, it began silently accepting Array writes (e.g. `u.role = %w[admin guest]`) and only
+  # blew up later with `NoMethodError: undefined method 'to_sym' for an instance of Array`.
+  def test_single_attr_rejects_array_assignment
+    u = User.new(role: 'admin', locale: 'de')
+    assert_raises(RuntimeError) { u.role = %w[admin guest] }
+    assert_raises(RuntimeError) { User.new(role: %w[admin guest], locale: 'de') }
+  end
+
   # Direct probe on `serializable?` — guards against re-introducing the inverted
   # `exclude?` logic that silently dropped valid keys from `HomogeneousIn` binds.
+  # Single-value attributes do NOT accept Array values (those are for `belongs_to_anchormodels`),
+  # so `serializable?(array)` must return false.
   def test_serializable_predicate
     type = User.type_for_attribute(:role)
     assert type.serializable?('admin')
     assert type.serializable?(:admin)
     assert type.serializable?(Role.find(:admin))
     assert type.serializable?(nil)
-    assert type.serializable?(%w[admin guest])
-    assert type.serializable?([:admin, Role.find(:guest)])
     refute type.serializable?(42) # rubocop:disable Rails/RefuteMethods
+    refute type.serializable?(%w[admin guest]) # rubocop:disable Rails/RefuteMethods
+    refute type.serializable?([:admin, Role.find(:guest)]) # rubocop:disable Rails/RefuteMethods
     refute type.serializable?([42]) # rubocop:disable Rails/RefuteMethods
   end
 
