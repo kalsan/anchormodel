@@ -7,6 +7,13 @@ unless defined? SimpleForm
 
 end
 if defined? SimpleForm
+  # SimpleForm input for a single-value anchormodel attribute, rendered as radio buttons.
+  # Unsuitable for collection attributes — use {AnchormodelCheckBoxesInput} for those.
+  #
+  # @example
+  #   <%= simple_form_for user do |f| %>
+  #     <%= f.input :role, as: :anchormodel_radio_buttons %>
+  #   <% end %>
   class AnchormodelRadioButtonsInput < SimpleForm::Inputs::CollectionRadioButtonsInput
     include Anchormodel::SimpleFormInputs::Helpers::AnchormodelInputsCommon
 

@@ -7,6 +7,13 @@ unless defined? SimpleForm
 
 end
 if defined? SimpleForm
+  # SimpleForm input for a collection-valued anchormodel attribute (`belongs_to_anchormodels`),
+  # rendered as check boxes (one per anchormodel key).
+  #
+  # @example
+  #   <%= simple_form_for user do |f| %>
+  #     <%= f.input :animals, as: :anchormodel_check_boxes %>
+  #   <% end %>
   class AnchormodelCheckBoxesInput < SimpleForm::Inputs::CollectionCheckBoxesInput
     include Anchormodel::SimpleFormInputs::Helpers::AnchormodelInputsCommon
 

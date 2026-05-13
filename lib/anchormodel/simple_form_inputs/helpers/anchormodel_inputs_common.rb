@@ -1,7 +1,21 @@
 class Anchormodel
   module SimpleFormInputs
     module Helpers
+      # Shared logic for all anchormodel SimpleForm inputs ({AnchormodelInput},
+      # {AnchormodelRadioButtonsInput}, {AnchormodelCheckBoxesInput}). Resolves the
+      # anchormodel class from the bound object, builds the collection of label/key
+      # tuples, and computes the currently-selected key(s).
+      #
+      # Callers can supply a custom `:collection` (either an array of anchormodels
+      # or an array of `[label, key]` tuples) to override the default of `am_class.all`.
+      # Callers without a bound `object` must pass `:anchormodel_attribute` explicitly.
       module AnchormodelInputsCommon
+        # Resolves the anchormodel attribute, builds the collection, and delegates to
+        # the underlying SimpleForm input class via `super`.
+        # @param wrapper_options [Hash,nil]
+        # @return [String] Rendered HTML.
+        # @raise [RuntimeError] if the bound object does not include {Anchormodel::ModelMixin},
+        #   or if the attribute does not look like an anchormodel attribute.
         def input(wrapper_options = nil)
           if object.present?
             unless object.respond_to?(:anchormodel_attributes)

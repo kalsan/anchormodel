@@ -1,16 +1,29 @@
-# @api description
-# A swiss army knife for common functionality
+# Internal utilities used by the {Anchormodel::ModelMixin#belongs_to_anchormodel} and
+# {Anchormodel::ModelMixin#belongs_to_anchormodels} macros. The public-facing entry
+# points are the macros themselves; methods here are the wiring that installs the
+# generated readers, writers, scopes, type casters, and helper scopes.
 module Anchormodel::Util
-  # Installs an anchormodel attribute in a model class
-  # @param model_class [ActiveRecord::Base] Internal only. The model class that the attribute should be installed to.
-  # @param attribute_name [String,Symbol] The name and database column of the attribute
-  # @param anchormodel_class [Class] Class of the Anchormodel (omit if attribute `:foo_bar` holds a `FooBar`)
-  # @param optional [Boolean] If false, a presence validation is added to the model. Forced to true if multiple is true.
-  # @param multiple [Boolean] Internal only. Distinguishes between `belongs_to_anchormodel` and `belongs_to_anchormodels`.
-  # @param model_readers [Boolean] If true, the model is given an ActiveRecord::Enum style method `my_model.my_key?` reader for each key in the anchormodel
-  # @param model_writers [Boolean] If true, the model is given an ActiveRecord::Enum style method `my_model.my_key!` writer for each key in the anchormodel
-  # @param model_scopes [Boolean] If true, the model is given an ActiveRecord::Enum style scope `MyModel.mykey` for each key in the anchormodel
-  # @param model_methods [Boolean, NilClass] If non-nil, this mass-assigns and overrides `model_readers`, `model_writers` and `model_scopes`
+  # Installs an anchormodel attribute in a model class. Wires up the AR `attribute`
+  # type cast, the custom reader/writer, the per-key readers/writers/scopes, and (for
+  # `belongs_to_anchormodels`) the bulk-key `with_any_<attr>` / `with_all_<attr>` scopes.
+  #
+  # Called from {Anchormodel::ModelMixin#belongs_to_anchormodel} and
+  # {Anchormodel::ModelMixin#belongs_to_anchormodels}. Not normally invoked directly.
+  #
+  # @param model_class [Class] Internal only. The model class the attribute is installed on.
+  # @param attribute_name [String,Symbol] The name and database column of the attribute.
+  # @param anchormodel_class [Class,nil] The anchormodel class. If omitted, inferred from
+  #   `attribute_name` (`:foo_bar` → `FooBar`).
+  # @param optional [Boolean] If false, a presence validation is added to the model. Forced
+  #   to true when `multiple` is true.
+  # @param multiple [Boolean] Internal only. Distinguishes between `belongs_to_anchormodel`
+  #   (false) and `belongs_to_anchormodels` (true).
+  # @param model_readers [Boolean] If true, generates `model.key?` readers per anchormodel key.
+  # @param model_writers [Boolean] If true, generates `model.key!` writers per anchormodel key.
+  # @param model_scopes [Boolean] If true, generates `Model.key` scopes per anchormodel key.
+  # @param model_methods [Boolean,nil] If non-nil, mass-overrides `model_readers`/`model_writers`/`model_scopes`.
+  # @return [void]
+  # @raise [RuntimeError] if a generated method or scope name collides with an existing one.
   def self.install_methods_in_model(model_class, attribute_name, anchormodel_class = nil,
                                     optional: false,
                                     multiple: false,
@@ -129,7 +142,7 @@ module Anchormodel::Util
     end
 
     # Create ActiveRecord::Enum style scope directly in the model class if asked to do so
-    # For a model User with anchormodel Role with keys :admin and :guest, this creates user.admin! and user.guest! (setting the role to admin/guest)
+    # For a model User with anchormodel Role with keys :admin and :guest, this creates User.admin and User.guest scopes
     if model_scopes
       anchormodel_class.all.each do |entry|
         if model_class.respond_to?(entry.key)
@@ -167,17 +180,37 @@ module Anchormodel::Util
     end
   end
 
-  # Coerces a list of Strings/Symbols/Anchormodel instances into validated key Strings.
-  # Raises if any key is not registered with `anchormodel_class`.
+  # Coerces a list of mixed-type key inputs into validated key Strings, ready for SQL binding.
+  # Accepts Strings, Symbols, Anchormodel instances, and arbitrarily nested arrays of those.
+  #
+  # @param keys [Array] Input list (flattened internally).
+  # @param anchormodel_class [Class] The anchormodel class against which keys are validated.
+  # @return [Array<String>] Flattened, stringified, validated keys.
+  # @raise [Anchormodel::InvalidKey] if any element is not a registered key.
+  # @example
+  #   Anchormodel::Util.normalize_anchormodel_keys([:cat, 'dog', Animal.find(:horse)], Animal)
+  #   # => ["cat", "dog", "horse"]
   def self.normalize_anchormodel_keys(keys, anchormodel_class)
     keys = keys.flatten.map { |k| k.respond_to?(:key) ? k.key.to_s : k.to_s }
     keys.each { |k| anchormodel_class.find(k) }
     keys
   end
 
-  # Builds a SQL fragment + binds matching rows whose CSV-stored `attribute` contains `key`.
-  # Returns `[sql, *binds]`. Escapes `_` / `%` / `!` in the key so SQL LIKE wildcards in
-  # the key (e.g. `:big_cat`) are treated literally instead of matching `bigXcat`.
+  # Builds a `WHERE` fragment matching rows whose CSV-stored `attribute` column contains
+  # `key`. Generates four predicates OR'd together to cover the cases where `key` appears
+  # at the start, end, middle, or as the sole entry in the CSV.
+  #
+  # `_` and `%` characters in `key` are escaped via `ESCAPE '!'` so that LIKE wildcards
+  # in the key (e.g. `:big_cat`) are treated literally instead of cross-matching arbitrary
+  # column values like `"bigXcat,foo"`.
+  #
+  # @param attribute [String,Symbol] Column name to query.
+  # @param key [String,Symbol] Key to search for inside the CSV column value.
+  # @return [Array(String, *String)] `[sql_fragment, *bind_values]`, suitable for splatting
+  #   into `Model.where(sql, *binds)`.
+  # @example
+  #   sql, *binds = Anchormodel::Util.csv_contains_like(:animals, :cat)
+  #   User.where(sql, *binds)
   def self.csv_contains_like(attribute, key)
     escaped = escape_like(key.to_s)
     sql = "#{attribute} = ? OR #{attribute} LIKE ? ESCAPE '!' " \
@@ -187,8 +220,14 @@ module Anchormodel::Util
   end
 
   # Escapes `_`, `%`, and `!` so the string can be used as a literal inside a SQL `LIKE`
-  # pattern with `ESCAPE '!'`. Uses `!` rather than `\` to avoid the cross-DB ambiguity
-  # of backslash inside SQL string literals.
+  # pattern paired with `ESCAPE '!'`. Uses `!` rather than the conventional `\` to avoid
+  # the cross-DB ambiguity of backslash inside SQL string literals (SQLite vs MySQL vs
+  # PostgreSQL all differ).
+  #
+  # @param str [String,Symbol] Input to escape.
+  # @return [String] Escaped string.
+  # @example
+  #   Anchormodel::Util.escape_like('big_cat') # => "big!_cat"
   def self.escape_like(str)
     str.to_s.gsub(/[!%_]/) { |c| "!#{c}" }
   end
