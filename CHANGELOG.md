@@ -8,6 +8,7 @@
 - Fix single-value anchormodel attributes silently accepting `Array` assignment (e.g. `u.role = %w[admin guest]`) — now raises immediately. Was a regression from the 0.3.1 `where(col: array)` fix; the Array branch turned out to be dead code since AR's `HomogeneousIn` serializes per element
 - Define `Anchormodel#hash` and `#eql?` to match `#==`. `Set` / `Hash` membership previously relied on instance identity (only safe because entries are singletons via `entries_hash`); copies via `dup` or test doubles now compare correctly by class + key
 - Introduce `Anchormodel::InvalidKey` exception class for unknown keys (raised from `find`, attribute assignment, and `with_any_<attr>` scopes). Inherits from `RuntimeError` so existing `rescue RuntimeError` blocks remain compatible while allowing narrower `rescue Anchormodel::InvalidKey`
+- Update default ruby version to 3.3.5
 
 # 0.3.1
 
