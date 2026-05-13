@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Runs the gem's test suite via `bundle exec`. Uses `ruby -S rake` to bypass the
+# rake binstub's hard-coded `#!/usr/bin/env ruby3.3` shebang, which fails on
+# systems where the active Ruby is not symlinked to `ruby3.3`.
+
+set -e
+cd "$(dirname "$0")/.."
+exec bundle exec ruby -S rake test "$@"
