@@ -125,6 +125,21 @@ class UserTest < Minitest::Test
     refute type.serializable?([42]) # rubocop:disable Rails/RefuteMethods
   end
 
+  # Multi#serializable? must return strict Boolean (true/false), not a truthy String/Array.
+  # Old impl: `values.map { super }.compact.join(',')` etc — returned non-Boolean and was
+  # always truthy regardless of validity.
+  def test_multi_serializable_predicate_returns_boolean
+    type = User.type_for_attribute(:animals)
+    assert_equal true,  type.serializable?(%w[cat dog])
+    assert_equal true,  type.serializable?([:cat, Animal.find(:dog)])
+    assert_equal true,  type.serializable?(Set.new(%w[cat]))
+    assert_equal true,  type.serializable?('cat,dog')
+    assert_equal true,  type.serializable?(nil)
+    assert_equal false, type.serializable?(42)
+    assert_equal false, type.serializable?([42])
+    assert_equal false, type.serializable?([:cat, 42])
+  end
+
   def test_model_readers_writers_with_different_class_name
     pia = User.new(locale: :en)
     pia.de!

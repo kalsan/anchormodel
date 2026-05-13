@@ -21,9 +21,11 @@ class Anchormodel::ActiveModelTypeValueMulti < Anchormodel::ActiveModelTypeValue
   def serializable?(values)
     return case values
            when Enumerable
-             values.map { |value| super(value) }.compact.join(',')
+             values.all? { |value| super(value) }
            when String
-             values.split(',').map { |value| super(value) }.compact
+             values.split(',').all? { |value| super(value) }
+           when nil
+             true
            else
              false
            end
