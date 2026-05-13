@@ -161,6 +161,48 @@ class UserTest < Minitest::Test
     assert_raises(RuntimeError) { User.new(role: 'guest', locale: 'de', animals: 'bogus,nonsense') }
   end
 
+  # `where(multi_col: array)` cannot match CSV-in-column storage. Helper scopes provide
+  # a working idiom for bulk-key queries.
+  def test_multi_helper_scopes_with_any_and_with_all
+    u_cat_dog   = User.create!(role: 'guest', locale: 'fr', animals: %w[cat dog])
+    u_dog_horse = User.create!(role: 'guest', locale: 'it', animals: %w[dog horse])
+    u_cat       = User.create!(role: 'guest', locale: 'de', animals: %w[cat])
+
+    # Plain `where(animals: array)` cannot reliably match CSV-in-column storage —
+    # it only catches rows whose entire column value equals one of the given keys.
+    # Use `with_any_<attr>` / `with_all_<attr>` instead.
+    plain_count  = User.where(animals: %w[cat dog]).count
+    helper_count = User.with_any_animals(:cat, :dog).count
+    refute_equal plain_count, helper_count, # rubocop:disable Rails/RefuteMethods
+                 'plain where(col: array) cannot match CSV-in-column storage; use with_any_<col>'
+
+    # `with_any_<attr>` — users that hold at least one of the given keys.
+    assert_equal 3, User.with_any_animals(:cat, :dog).count
+    assert_equal 2, User.with_any_animals(:cat).count
+    assert_equal 1, User.with_any_animals(:horse).count
+    assert_equal 0, User.with_any_animals(:rat).count
+    assert_equal 0, User.with_any_animals.count # empty arg list
+
+    # Accepts Strings, Symbols, and Anchormodel instances interchangeably.
+    assert_equal 2, User.with_any_animals('cat').count
+    assert_equal 2, User.with_any_animals(Animal.find(:cat)).count
+    assert_equal 3, User.with_any_animals([:cat, 'dog']).count # flattened
+
+    # `with_all_<attr>` — users that hold every given key.
+    assert_equal 1, User.with_all_animals(:cat, :dog).count
+    assert_equal 2, User.with_all_animals(:dog).count
+    assert_equal 0, User.with_all_animals(:cat, :dog, :rat).count
+
+    # Invalid keys raise immediately.
+    assert_raises(RuntimeError) { User.with_any_animals(:bogus).to_a }
+    assert_raises(RuntimeError) { User.with_all_animals(:cat, :bogus).to_a }
+
+    # Returned IDs check
+    assert_equal [u_cat_dog.id, u_cat.id].sort, User.with_any_animals(:cat).pluck(:id).sort
+    assert_equal [u_cat_dog.id, u_dog_horse.id].sort, User.with_any_animals(:dog).pluck(:id).sort
+    assert_equal [u_cat_dog.id], User.with_all_animals(:cat, :dog).pluck(:id)
+  end
+
   def test_multi_cast_nil_returns_empty_set
     type = User.type_for_attribute(:animals)
     assert_equal Set.new, type.cast(nil)

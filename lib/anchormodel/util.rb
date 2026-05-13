@@ -145,5 +145,36 @@ module Anchormodel::Util
         end
       end
     end
+
+    # For `belongs_to_anchormodels`, add bulk-key scopes since `where(col: array)` cannot
+    # match CSV-in-column storage. Defined regardless of `model_scopes` — they are bulk
+    # query helpers, not per-key scopes.
+    if multiple
+      model_class.scope(:"with_any_#{attribute_name}", lambda do |*keys|
+        keys = Anchormodel::Util.normalize_anchormodel_keys(keys, anchormodel_class)
+        next none if keys.empty?
+
+        clause = keys.map do
+          "#{attribute_name} = ? OR #{attribute_name} LIKE ? OR #{attribute_name} LIKE ? OR #{attribute_name} LIKE ?"
+        end.join(' OR ')
+        binds = keys.flat_map { |k| [k, "#{k},%", "%,#{k}", "%,#{k},%"] }
+        where(clause, *binds)
+      end)
+
+      model_class.scope(:"with_all_#{attribute_name}", lambda do |*keys|
+        keys = Anchormodel::Util.normalize_anchormodel_keys(keys, anchormodel_class)
+        next all if keys.empty?
+
+        keys.reduce(all) { |rel, k| rel.merge(public_send(:"with_any_#{attribute_name}", k)) }
+      end)
+    end
+  end
+
+  # Coerces a list of Strings/Symbols/Anchormodel instances into validated key Strings.
+  # Raises if any key is not registered with `anchormodel_class`.
+  def self.normalize_anchormodel_keys(keys, anchormodel_class)
+    keys = keys.flatten.map { |k| k.respond_to?(:key) ? k.key.to_s : k.to_s }
+    keys.each { |k| anchormodel_class.find(k) }
+    keys
   end
 end
