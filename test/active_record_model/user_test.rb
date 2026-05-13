@@ -130,6 +130,37 @@ class UserTest < Minitest::Test
   # always truthy regardless of validity.
   # Multi#cast must tolerate nil — e.g. NULL stored in DB from a migration that did not backfill,
   # or column with no default. Also covers `deserialize(nil)` which falls back to `cast`.
+  # Multi#serialize must validate String inputs against valid keys, not pass through verbatim.
+  # Old impl returned the raw String unchecked, which corrupted DB rows and deferred errors to the next read.
+  def test_multi_serialize_validates_string_input
+    type = User.type_for_attribute(:animals)
+    assert_equal 'cat',     type.serialize('cat')
+    assert_equal 'cat,dog', type.serialize('cat,dog')
+    assert_equal '',        type.serialize('')
+    assert_raises(RuntimeError) { type.serialize('bogus') }
+    assert_raises(RuntimeError) { type.serialize('bogus,nonsense') }
+    assert_raises(RuntimeError) { type.serialize('cat,bogus') }
+  end
+
+  # Same protection must apply through normal model assignment, not just the type object directly.
+  def test_multi_string_assignment_validates
+    # Constructor with valid String
+    u = User.create!(role: 'guest', locale: 'de', animals: 'cat,dog')
+    assert_equal(Set.new([Animal.find(:cat), Animal.find(:dog)]), u.animals)
+    assert_equal(Set.new([Animal.find(:cat), Animal.find(:dog)]), User.first.animals) # round-trip via DB
+
+    # Writer with valid single-key String
+    u.animals = 'horse'
+    assert_equal(Set.new([Animal.find(:horse)]), u.animals)
+
+    # Writer with invalid String raises immediately, not on next read
+    assert_raises(RuntimeError) { u.animals = 'bogus' }
+    assert_raises(RuntimeError) { u.animals = 'cat,bogus' }
+
+    # Constructor with invalid String raises immediately
+    assert_raises(RuntimeError) { User.new(role: 'guest', locale: 'de', animals: 'bogus,nonsense') }
+  end
+
   def test_multi_cast_nil_returns_empty_set
     type = User.type_for_attribute(:animals)
     assert_equal Set.new, type.cast(nil)

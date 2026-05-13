@@ -11,7 +11,7 @@ class Anchormodel::ActiveModelTypeValueMulti < Anchormodel::ActiveModelTypeValue
            when Enumerable
              values.map { |value| super(value) }.compact.join(',')
            when String
-             values
+             values.split(',').map { |value| super(value) }.compact.join(',')
            when nil
              ''
            else

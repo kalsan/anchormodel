@@ -2,6 +2,7 @@
 
 - Fix `Multi#serializable?` returning non-Boolean values (CSV String / Array) and rejecting `nil`
 - Fix `Multi#cast(nil)` crashing with `NoMethodError` — now returns an empty `Set` (also fixes reader path on NULL DB column via `deserialize`)
+- Fix `Multi#serialize` accepting unvalidated `String` input — invalid keys now raise on assignment instead of being stored verbatim and crashing on the next read
 
 # 0.3.1
 
