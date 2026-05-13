@@ -5,12 +5,14 @@ class UserTest < Minitest::Test
     User.destroy_all
   end
 
+  # `find` by Symbol and by String must return the same singleton instance.
   def test_retrieval
     assert_equal Role.find(:guest), Role.find('guest')
   end
 
+  # `Anchormodel.all` preserves declaration order and is isolated per subclass
+  # (no cross-class registry pollution).
   def test_collections
-    # Order must fit as well
     assert_equal(
       %i[guest moderator admin the_chosen_one].map { |key| Role.find(key) },
       Role.all
@@ -21,11 +23,13 @@ class UserTest < Minitest::Test
     )
   end
 
+  # All three assignment forms are valid: String, Symbol, Anchormodel instance.
+  # Reader always returns the Anchormodel instance regardless of input form.
   def test_basic_setters_and_getters
     u = User.create!(role: 'guest', locale: 'de') # String assignment
     assert_equal Role.find(:guest), u.role
     assert_equal Locale.find(:de), u.locale
-    u.update!(role: :admin, locale: Locale.find(:en)) # Symbol and Anchormodel assignemnt
+    u.update!(role: :admin, locale: Locale.find(:en)) # Symbol and Anchormodel assignment
     assert_equal Role.find(:admin), u.role
     assert_equal Locale.find(:en), u.locale
   end
@@ -51,6 +55,8 @@ class UserTest < Minitest::Test
     assert_equal 'a', ({ admin1 => 'a' }[admin2])
   end
 
+  # Two users with the same locale yield equal locale instances; different locales differ.
+  # Verifies that `==` works through model accessors (not just direct `find` results).
   def test_comparison
     bob = User.create(locale: :en)
     alice = User.create(locale: :fr)
@@ -59,6 +65,8 @@ class UserTest < Minitest::Test
     assert bob.locale != alice.locale
   end
 
+  # Custom attributes declared on the Anchormodel subclass (e.g. `privilege_level` on Role)
+  # are accessible both standalone and through the model accessor.
   def test_attributes
     # Standalone
     assert_equal 0, Role.find(:guest).privilege_level
@@ -67,6 +75,8 @@ class UserTest < Minitest::Test
     assert_equal 42, u.role.privilege_level
   end
 
+  # User-defined `<=>` on the Anchormodel subclass (via `include Comparable`) powers
+  # `<`, `>`, `==`, and `<=>` between instances.
   def test_custom_comparison
     assert_equal(-1, Role.find(:moderator) <=> Role.find(:admin))
     assert_equal(1, Role.find(:moderator) <=> Role.find(:guest))
@@ -74,6 +84,8 @@ class UserTest < Minitest::Test
     assert Role.find(:moderator) < Role.find(:admin)
   end
 
+  # `belongs_to_anchormodel :col_name, AnchormodelClass` decouples the DB column name
+  # from the anchormodel class — here `:secondary_role` maps to `Role`.
   def test_alternative_column_name
     ben = User.create!(
       role:           Role.find(:moderator),
@@ -85,11 +97,14 @@ class UserTest < Minitest::Test
     assert_equal(Locale.find(:de), ben.locale)
   end
 
+  # `optional: true` permits NULL in the column; reader returns nil rather than raising.
   def test_optional_attribute
     jenny = User.create!(role: :admin, locale: :en)
     assert_nil jenny.secondary_role
   end
 
+  # Auto-generated per-key readers (`pia.admin?`) and writers (`pia.admin!`) installed
+  # by `belongs_to_anchormodel` for every key in the anchormodel.
   def test_model_readers_and_writers
     pia = User.new
     pia.admin!
@@ -98,6 +113,8 @@ class UserTest < Minitest::Test
     assert_equal Role.find(:admin), pia.role
   end
 
+  # Auto-generated per-key class scopes (`User.admin`, `User.moderator`, etc.) installed
+  # by `belongs_to_anchormodel`.
   def test_model_scopes
     User.create!(role: :admin, locale: :en)
     User.create!(role: :admin, locale: :en)
@@ -108,7 +125,8 @@ class UserTest < Minitest::Test
   end
 
   # Regression: `where(anchormodel_col: %w[a b])` used to collapse to `IN (NULL)`
-  # because Single#serialize lacked Array handling. See memory `array-where-collapses-to-null`.
+  # because `Single#serializable?` was inverted, causing AR's `HomogeneousIn` to
+  # filter out all valid keys before binding.
   def test_where_with_array_of_keys
     User.create!(role: :admin, locale: :en)
     User.create!(role: :moderator, locale: :en)
@@ -128,6 +146,7 @@ class UserTest < Minitest::Test
     assert_equal 1, User.where.not(role: %w[admin moderator]).count
   end
 
+  # Bulk `where` with any unknown key raises immediately rather than silently filtering it out.
   def test_where_with_array_of_invalid_keys_raises
     assert_raises(RuntimeError) { User.where(role: %w[admin nope]).to_a }
   end
@@ -142,7 +161,7 @@ class UserTest < Minitest::Test
     assert_raises(RuntimeError) { User.new(role: %w[admin guest], locale: 'de') }
   end
 
-  # Direct probe on `serializable?` — guards against re-introducing the inverted
+  # Direct probe on `Single#serializable?` — guards against re-introducing the inverted
   # `exclude?` logic that silently dropped valid keys from `HomogeneousIn` binds.
   # Single-value attributes do NOT accept Array values (those are for `belongs_to_anchormodels`),
   # so `serializable?(array)` must return false.
@@ -158,13 +177,9 @@ class UserTest < Minitest::Test
     refute type.serializable?([42]) # rubocop:disable Rails/RefuteMethods
   end
 
-  # Multi#serializable? must return strict Boolean (true/false), not a truthy String/Array.
-  # Old impl: `values.map { super }.compact.join(',')` etc — returned non-Boolean and was
-  # always truthy regardless of validity.
-  # Multi#cast must tolerate nil — e.g. NULL stored in DB from a migration that did not backfill,
-  # or column with no default. Also covers `deserialize(nil)` which falls back to `cast`.
-  # Multi#serialize must validate String inputs against valid keys, not pass through verbatim.
-  # Old impl returned the raw String unchecked, which corrupted DB rows and deferred errors to the next read.
+  # `Multi#serialize` must validate String inputs against valid keys, not pass through verbatim.
+  # Old impl returned the raw String unchecked, which corrupted DB rows and deferred errors
+  # to the next read.
   def test_multi_serialize_validates_string_input
     type = User.type_for_attribute(:animals)
     assert_equal 'cat',     type.serialize('cat')
@@ -175,7 +190,8 @@ class UserTest < Minitest::Test
     assert_raises(RuntimeError) { type.serialize('cat,bogus') }
   end
 
-  # Same protection must apply through normal model assignment, not just the type object directly.
+  # Same String-input validation must apply through normal model assignment, not just
+  # the type object directly. Verifies constructor, writer, and DB round-trip.
   def test_multi_string_assignment_validates
     # Constructor with valid String
     u = User.create!(role: 'guest', locale: 'de', animals: 'cat,dog')
@@ -194,9 +210,9 @@ class UserTest < Minitest::Test
     assert_raises(RuntimeError) { User.new(role: 'guest', locale: 'de', animals: 'bogus,nonsense') }
   end
 
-  # SQL LIKE treats `_` as a single-character wildcard. Keys containing `_` must be escaped
-  # in the per-key scope and in the `with_any_<attr>` helper, or they cross-match arbitrary
-  # column values with one character in place of the underscore.
+  # SQL LIKE treats `_` as a single-character wildcard. Keys containing `_` (e.g. `:big_cat`)
+  # must be escaped in the per-key scope and in the `with_any_<attr>` helper, or they
+  # cross-match arbitrary column values with one character in place of the underscore.
   def test_multi_scope_escapes_underscore_wildcard_in_keys
     # Raw row whose `animals` CSV does NOT contain `big_cat` but does contain a string
     # that an unescaped LIKE pattern (`%big_cat,%`) would match: `bigXcat,foo`.
@@ -213,7 +229,8 @@ class UserTest < Minitest::Test
     assert_equal 1, User.with_all_animals(:big_cat).count
   end
 
-  # `where(multi_col: array)` cannot match CSV-in-column storage. Helper scopes provide
+  # `where(multi_col: array)` cannot match CSV-in-column storage. Helper scopes
+  # `with_any_<attr>` (OR semantics) and `with_all_<attr>` (AND semantics) provide
   # a working idiom for bulk-key queries.
   def test_multi_helper_scopes_with_any_and_with_all
     u_cat_dog   = User.create!(role: 'guest', locale: 'fr', animals: %w[cat dog])
@@ -255,12 +272,18 @@ class UserTest < Minitest::Test
     assert_equal [u_cat_dog.id], User.with_all_animals(:cat, :dog).pluck(:id)
   end
 
+  # `Multi#cast` must tolerate nil — e.g. NULL stored in DB from a migration that did
+  # not backfill, or column with no default. Also covers `deserialize(nil)` which falls
+  # back to `cast` from `ActiveModel::Type::Value`.
   def test_multi_cast_nil_returns_empty_set
     type = User.type_for_attribute(:animals)
     assert_equal Set.new, type.cast(nil)
     assert_equal Set.new, type.deserialize(nil)
   end
 
+  # `Multi#serializable?` must return strict Boolean (true/false), not a truthy String/Array.
+  # Old impl: `values.map { super }.compact.join(',')` etc — returned non-Boolean and was
+  # always truthy regardless of element validity.
   def test_multi_serializable_predicate_returns_boolean
     type = User.type_for_attribute(:animals)
     assert_equal true,  type.serializable?(%w[cat dog])
@@ -273,6 +296,8 @@ class UserTest < Minitest::Test
     assert_equal false, type.serializable?([:cat, 42])
   end
 
+  # Per-key readers/writers use the anchormodel's own keys (`:de`, `:fr`) even when the
+  # model attribute name differs (`preferred_locale` → `Locale`).
   def test_model_readers_writers_with_different_class_name
     pia = User.new(locale: :en)
     pia.de!
@@ -282,6 +307,8 @@ class UserTest < Minitest::Test
     assert_equal Locale.find(:en), pia.locale
   end
 
+  # Per-key scopes use the anchormodel's own keys (`User.de`, `User.fr`) even when the
+  # model attribute name differs (`preferred_locale` → `Locale`).
   def test_model_scopes_with_different_class_name
     User.create!(role: :admin, locale: :en, preferred_locale: :de)
     User.create!(role: :admin, locale: :en, preferred_locale: :de)
@@ -291,6 +318,8 @@ class UserTest < Minitest::Test
     assert_equal 0, User.en.count
   end
 
+  # Empty String is treated as nil — supports default Rails form submissions that send
+  # `""` for unset selects on optional attributes.
   def test_rails_blank_assignment
     u = User.new(role: :admin, secondary_role: :admin, locale: :en, preferred_locale: :en)
     u.secondary_role = ''
@@ -301,17 +330,21 @@ class UserTest < Minitest::Test
   # Testing failures
   ###---
 
+  # A required (non-optional) anchormodel attribute that is unset triggers Rails presence
+  # validation on save.
   def test_presence_validation
     valentine = User.new
     assert_raises(ActiveRecord::RecordInvalid) { valentine.save! }
   end
 
+  # `find` with an unregistered key raises `Anchormodel::InvalidKey`.
   def test_missing_key
     assert_raises(Anchormodel::InvalidKey) { Role.find(:does_not_exist) }
   end
 
-  # Callers want to `rescue` invalid-key errors specifically without matching
-  # exception message strings. `Anchormodel::InvalidKey` is the dedicated class.
+  # Callers want to `rescue` invalid-key errors specifically without matching exception
+  # message strings. `Anchormodel::InvalidKey` is the dedicated class, raised from every
+  # entry point that could encounter an unknown key.
   def test_invalid_key_error_class
     # `find` with unknown key
     assert_raises(Anchormodel::InvalidKey) { Role.find(:nope) }
@@ -329,21 +362,21 @@ class UserTest < Minitest::Test
     # Helper scope with unknown key
     assert_raises(Anchormodel::InvalidKey) { User.with_any_animals(:nope).to_a }
 
-    # InvalidKey must be a StandardError so generic `rescue` catches it
+    # InvalidKey must inherit from StandardError so generic `rescue` catches it
     assert_operator Anchormodel::InvalidKey, :<, StandardError
   end
 
-  # Attempting to create a model with an invalid constant name should fail
+  # Attempting to create a model with an invalid anchormodel key should fail.
   def test_invalid_key_update
     assert_raises(RuntimeError) { User.create!(role: :admin, locale: :de, preferred_locale: :invalid) }
   end
 
-  # Attempting to assign an invalid constant name to a model should fail
+  # Attempting to assign an invalid anchormodel key to a model attribute should fail.
   def test_invalid_key_assignment
     assert_raises(RuntimeError) { User.new(role: :invalid) }
   end
 
-  # An invalid constant name into the DB should raise when reading
+  # An invalid anchormodel key sneaked into the DB raises on read (via `cast` → `find`).
   def test_invalid_db_read
     sql = <<~SQL.squish
       INSERT INTO users (role, locale, preferred_locale, created_at, updated_at) VALUES ('invalid', 'de', 'de', 'now', 'now')
@@ -356,6 +389,8 @@ class UserTest < Minitest::Test
   # Testing multiple anchormodel associations
   ###---
 
+  # Multi attribute full lifecycle: empty default, `<<`, `add` with String/Symbol/instance,
+  # `delete` with String/Symbol/instance, mass `=`, and `clear`.
   def test_multi_basics
     u = User.create!(role: 'guest', locale: 'de')
     assert_equal(Set.new, u.animals)
@@ -381,6 +416,7 @@ class UserTest < Minitest::Test
     assert_equal(false, u.animals.any?)
   end
 
+  # Round-trip through the database preserves the Set of anchormodels (write CSV → read CSV → Set).
   def test_multi_save_load
     u = User.create!(role: 'guest', locale: 'de')
     u.animals = %i[cat dog]
@@ -389,6 +425,8 @@ class UserTest < Minitest::Test
     assert_equal(Set.new([Animal.find(:cat), Animal.find(:dog)]), freshly_loaded_u.animals)
   end
 
+  # Per-key readers (`u.cat?`) and writers (`u.cat!`) work for multi attributes.
+  # `cat!` is idempotent — Set-based storage prevents duplicates.
   def test_multi_model_readers_and_writers
     u = User.create!(role: 'guest', locale: 'de')
     u.cat!
@@ -401,6 +439,8 @@ class UserTest < Minitest::Test
     assert_equal(false, u.horse?)
   end
 
+  # Per-key scopes (`User.cat`, `User.dog`) work for multi attributes via the
+  # CSV-contains LIKE predicate (`Anchormodel::Util.csv_contains_like`).
   def test_multi_model_scopes
     u = User.create!(role: 'guest', locale: 'fr', animals: %w[dog cat])
     v = User.create!(role: 'guest', locale: 'it', animals: %w[dog horse])
