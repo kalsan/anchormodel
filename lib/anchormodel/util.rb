@@ -136,10 +136,8 @@ module Anchormodel::Util
           fail("Anchormodel scope #{entry.key} already defined for #{self}, add `model_scopes: false` to `belongs_to_anchormodel :#{attribute_name}`.")
         end
         if multiple
-          model_class.scope(entry.key, lambda {
-                                         where("#{attribute_name} LIKE ? OR #{attribute_name} LIKE ? OR #{attribute_name} LIKE ? OR #{attribute_name} LIKE ?",
-                                               "%#{entry.key},%", "%#{entry.key}", "#{entry.key},%", entry.key.to_s)
-                                       })
+          sql, *binds = Anchormodel::Util.csv_contains_like(attribute_name, entry.key)
+          model_class.scope(entry.key, -> { where(sql, *binds) })
         else
           model_class.scope(entry.key, -> { where(attribute_name => entry.key) })
         end
@@ -154,11 +152,10 @@ module Anchormodel::Util
         keys = Anchormodel::Util.normalize_anchormodel_keys(keys, anchormodel_class)
         next none if keys.empty?
 
-        clause = keys.map do
-          "#{attribute_name} = ? OR #{attribute_name} LIKE ? OR #{attribute_name} LIKE ? OR #{attribute_name} LIKE ?"
-        end.join(' OR ')
-        binds = keys.flat_map { |k| [k, "#{k},%", "%,#{k}", "%,#{k},%"] }
-        where(clause, *binds)
+        clauses = keys.map { |k| Anchormodel::Util.csv_contains_like(attribute_name, k) }
+        sql = clauses.map { |c| "(#{c.first})" }.join(' OR ')
+        binds = clauses.flat_map { |c| c.drop(1) }
+        where(sql, *binds)
       end)
 
       model_class.scope(:"with_all_#{attribute_name}", lambda do |*keys|
@@ -176,5 +173,23 @@ module Anchormodel::Util
     keys = keys.flatten.map { |k| k.respond_to?(:key) ? k.key.to_s : k.to_s }
     keys.each { |k| anchormodel_class.find(k) }
     keys
+  end
+
+  # Builds a SQL fragment + binds matching rows whose CSV-stored `attribute` contains `key`.
+  # Returns `[sql, *binds]`. Escapes `_` / `%` / `!` in the key so SQL LIKE wildcards in
+  # the key (e.g. `:big_cat`) are treated literally instead of matching `bigXcat`.
+  def self.csv_contains_like(attribute, key)
+    escaped = escape_like(key.to_s)
+    sql = "#{attribute} = ? OR #{attribute} LIKE ? ESCAPE '!' " \
+          "OR #{attribute} LIKE ? ESCAPE '!' OR #{attribute} LIKE ? ESCAPE '!'"
+    binds = [key.to_s, "#{escaped},%", "%,#{escaped}", "%,#{escaped},%"]
+    [sql, *binds]
+  end
+
+  # Escapes `_`, `%`, and `!` so the string can be used as a literal inside a SQL `LIKE`
+  # pattern with `ESCAPE '!'`. Uses `!` rather than `\` to avoid the cross-DB ambiguity
+  # of backslash inside SQL string literals.
+  def self.escape_like(str)
+    str.to_s.gsub(/[!%_]/) { |c| "!#{c}" }
   end
 end

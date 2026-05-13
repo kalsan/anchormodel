@@ -161,6 +161,25 @@ class UserTest < Minitest::Test
     assert_raises(RuntimeError) { User.new(role: 'guest', locale: 'de', animals: 'bogus,nonsense') }
   end
 
+  # SQL LIKE treats `_` as a single-character wildcard. Keys containing `_` must be escaped
+  # in the per-key scope and in the `with_any_<attr>` helper, or they cross-match arbitrary
+  # column values with one character in place of the underscore.
+  def test_multi_scope_escapes_underscore_wildcard_in_keys
+    # Raw row whose `animals` CSV does NOT contain `big_cat` but does contain a string
+    # that an unescaped LIKE pattern (`%big_cat,%`) would match: `bigXcat,foo`.
+    ActiveRecord::Base.connection.execute(<<~SQL.squish)
+      INSERT INTO users (role, locale, preferred_locale, animals, created_at, updated_at)
+      VALUES ('guest', 'de', 'de', 'bigXcat,foo', 'now', 'now')
+    SQL
+    # Baseline row that actually contains :big_cat.
+    User.create!(role: 'guest', locale: 'fr', animals: %w[big_cat])
+
+    # Both scope styles must match only the real row, not the look-alike.
+    assert_equal 1, User.big_cat.count
+    assert_equal 1, User.with_any_animals(:big_cat).count
+    assert_equal 1, User.with_all_animals(:big_cat).count
+  end
+
   # `where(multi_col: array)` cannot match CSV-in-column storage. Helper scopes provide
   # a working idiom for bulk-key queries.
   def test_multi_helper_scopes_with_any_and_with_all
