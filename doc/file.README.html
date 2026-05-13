@@ -64,6 +64,8 @@
 
 <p>This gem provides a simple but powerful alternative to <a href="https://api.rubyonrails.org/v7.0/classes/ActiveRecord/Enum.html">Rails Enums</a>. In contrast to regular Enums, Anchormodels can hold application logic, making them ideal for tying code to database objects.</p>
 
+<p>For a tour of real-world usage patterns — ordered enums with <code>Comparable</code>, state machines, polymorphic class registries, multi-key collection attributes, cross-anchormodel references, and more — see <a href="EXAMPLES_md.html">EXAMPLES.md</a>.</p>
+
 <h1 id="label-Use+case">Use case</h1>
 
 <p>Typically, a Rails application consists of three kinds of state:</p>
@@ -144,8 +146,14 @@
 <pre class="code ruby"><code class="ruby"><span class='comment'># Retrieve all user roles:
 </span><span class='const'>Role</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span>
 
-<span class='comment'># Retrieve a specific role from the String and find its privilege level
+<span class='comment'># Retrieve a specific role. `find` accepts a String, a Symbol, or `nil` (returns nil).
 </span><span class='const'>Role</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:guest</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_privilege_level'>privilege_level</span>
+<span class='const'>Role</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>guest</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_privilege_level'>privilege_level</span> <span class='comment'># equivalent
+</span>
+<span class='comment'># Assignment accepts a String, Symbol, or Anchormodel instance:
+</span><span class='ivar'>@user</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>admin</span><span class='tstring_end'>&#39;</span></span>
+<span class='ivar'>@user</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span> <span class='op'>=</span> <span class='symbol'>:admin</span>
+<span class='ivar'>@user</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span> <span class='op'>=</span> <span class='const'>Role</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:admin</span><span class='rparen'>)</span>
 
 <span class='comment'># Implement a Rails helper that makes sure users can only edit other users that have a lower privilege level than themselves
 </span><span class='kw'>def</span> <span class='id identifier rubyid_user_can_edit?'>user_can_edit?</span><span class='lparen'>(</span><span class='id identifier rubyid_this_user'>this_user</span><span class='comma'>,</span> <span class='id identifier rubyid_other_user'>other_user</span><span class='rparen'>)</span>
@@ -158,6 +166,19 @@
 <span class='comment'># Check whether @user has role admin
 </span><span class='ivar'>@user</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span><span class='period'>.</span><span class='id identifier rubyid_admin?'>admin?</span> <span class='comment'># true if and only if the role is admin (false otherwise)
 </span></code></pre>
+
+<h2 id="label-Error+handling">Error handling</h2>
+
+<p>Anchormodel raises <code>Anchormodel::InvalidKey</code> whenever an unknown key is supplied — from <code>find</code>, from attribute writers, and from the bulk-key scopes shown below:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>begin</span>
+  <span class='const'>Role</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:does_not_exist</span><span class='rparen'>)</span>
+<span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Anchormodel/InvalidKey.html" title="Anchormodel::InvalidKey (class)">InvalidKey</a></span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+  <span class='comment'># e.message: &quot;Retrieved undefined anchor model key :does_not_exist for Role.&quot;
+</span><span class='kw'>end</span>
+</code></pre>
+
+<p><code>Anchormodel::InvalidKey</code> inherits from <code>RuntimeError</code>, so existing <code>rescue RuntimeError</code> blocks remain compatible while allowing the narrower <code>rescue Anchormodel::InvalidKey</code>.</p>
 
 <p>Your form could look something like this:</p>
 
@@ -302,6 +323,23 @@
 
 <p>Note that no other methods of Set are overwritten at this point - if you use any other methods mutating the underlying Set, your changes will not be applied.</p>
 
+<h2 id="label-Querying+a+collection+of+Anchormodels">Querying a collection of Anchormodels</h2>
+
+<p>Because keys are stored as a CSV string in a single column, the standard Rails idiom <code>Model.where(col: array)</code> does <strong>not</strong> work for <code>belongs_to_anchormodels</code> attributes — it compiles to an <code>IN (...)</code> clause that compares against the full column value (e.g. <code>&quot;cat,dog&quot;</code>) rather than the individual entries.</p>
+
+<p>Anchormodel provides two helper scopes for bulk-key queries:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># Users that hold at least one of the given keys
+</span><span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_with_any_animals'>with_any_animals</span><span class='lparen'>(</span><span class='symbol'>:cat</span><span class='comma'>,</span> <span class='symbol'>:dog</span><span class='rparen'>)</span>
+
+<span class='comment'># Users that hold every given key
+</span><span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_with_all_animals'>with_all_animals</span><span class='lparen'>(</span><span class='symbol'>:cat</span><span class='comma'>,</span> <span class='symbol'>:dog</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>Both scopes accept <code>String</code>, <code>Symbol</code>, or <code>Anchormodel</code> instances (and nested arrays), and raise <code>Anchormodel::InvalidKey</code> on invalid keys. They are always defined for every <code>belongs_to_anchormodels</code> attribute (independent of the <code>model_scopes</code> setting), named <code>with_any_&lt;attribute_name&gt;</code> / <code>with_all_&lt;attribute_name&gt;</code>.</p>
+
+<p>For a single key, the per-key scope generated by <code>model_scopes</code> (e.g. <code>User.cat</code>) is the most concise option.</p>
+
 <h2 id="label-Basic+rails+form+for+a+collection+of+Anchormodels">Basic rails form for a collection of Anchormodels</h2>
 
 <pre class="code ruby"><code class="ruby">&lt;%= form_with(model: user) do |form| %&gt;
@@ -339,7 +377,7 @@
 </div></div>
 
       <div id="footer">
-  Generated on Wed May 13 11:46:17 2026 by
+  Generated on Wed May 13 15:48:24 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.3.5).
 </div>

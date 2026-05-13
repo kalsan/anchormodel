@@ -1,4 +1,4 @@
-# unreleased
+# 0.4.0
 
 - Fix `Multi#serializable?` returning non-Boolean values (CSV String / Array) and rejecting `nil`
 - Fix `Multi#cast(nil)` crashing with `NoMethodError` — now returns an empty `Set` (also fixes reader path on NULL DB column via `deserialize`)

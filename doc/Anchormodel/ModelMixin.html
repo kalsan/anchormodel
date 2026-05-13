@@ -91,17 +91,65 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>All Rails models making use of #belongs_to_anchormodel must include this mixin. Typically, it is included in <code>application_record.rb</code>.</p>
+<p>Include this mixin in every Rails model that uses anchormodel attributes. The common pattern is to include it once in <code>application_record.rb</code> so all descendant models pick it up automatically.</p>
+
+<p>Adds two class-level macros: - ClassMethods#belongs_to_anchormodel for single-value attributes - ClassMethods#belongs_to_anchormodels for collection-valued attributes</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Install in ApplicationRecord</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='kw'>class</span> <span class='const'>ApplicationRecord</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_include'>include</span> <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'>ModelMixin</span>
+<span class='kw'>end</span></code></pre>
+    
+  </div>
+
 
 </div>
 
 
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#anchormodel_attributes-instance_method" title="#anchormodel_attributes (instance method)">#<strong>anchormodel_attributes</strong>  &#x21d2; Hash{Symbol =&gt; Anchormodel::Attribute} </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>All anchormodel attributes declared on this model class, keyed by attribute name.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
 
 
 
@@ -132,7 +180,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Creates an attribute linking to an Anchormodel.</p>
+<p>Declares a single-value anchormodel attribute.</p>
 </div></span>
   
 </li>
@@ -156,7 +204,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Creates an attribute linking to an array of Anchormodels.</p>
+<p>Declares a collection-valued anchormodel attribute.</p>
 </div></span>
   
 </li>
@@ -167,6 +215,68 @@
 
 
   
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="anchormodel_attributes=-instance_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="anchormodel_attributes-instance_method">
+  
+    #<strong>anchormodel_attributes</strong>  &#x21d2; <tt>Hash{Symbol =&gt; <span class='object_link'><a href="Attribute.html" title="Anchormodel::Attribute (class)">Anchormodel::Attribute</a></span>}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns All anchormodel attributes declared on this model class, keyed by attribute name.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol =&gt; <span class='object_link'><a href="Attribute.html" title="Anchormodel::Attribute (class)">Anchormodel::Attribute</a></span>}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>All anchormodel attributes declared on this model class, keyed by attribute name.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/model_mixin.rb', line 20</span>
+
+<span class='id identifier rubyid_class_attribute'>class_attribute</span> <span class='symbol'>:anchormodel_attributes</span><span class='comma'>,</span> <span class='label'>default:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
 
   <div id="class_method_details" class="method_details_list">
     <h2>Class Method Details</h2>
@@ -184,18 +294,36 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Creates an attribute linking to an Anchormodel. The attribute should be present in the DB and the column should be of type String and named the same as <code>attribute_name</code>.</p>
+<p>Declares a single-value anchormodel attribute.</p>
+
+<p>The DB table must have a String column with the same name as <code>attribute_name</code>.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Basic usage</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='kw'>class</span> <span class='const'>User</span> <span class='op'>&lt;</span> <span class='const'>ApplicationRecord</span>
+  <span class='id identifier rubyid_belongs_to_anchormodel'>belongs_to_anchormodel</span> <span class='symbol'>:role</span>               <span class='comment'># `Role` inferred from attribute name
+</span>  <span class='id identifier rubyid_belongs_to_anchormodel'>belongs_to_anchormodel</span> <span class='symbol'>:role</span><span class='comma'>,</span> <span class='label'>optional:</span> <span class='kw'>true</span>
+  <span class='id identifier rubyid_belongs_to_anchormodel'>belongs_to_anchormodel</span> <span class='symbol'>:favorite_color</span><span class='comma'>,</span> <span class='const'>Color</span>   <span class='comment'># explicit anchormodel class
+</span><span class='kw'>end</span></code></pre>
+    
+  </div>
+
 
   <p class="tag_title">See Also:</p>
   <ul class="see">
     
-      <li>Parameters</li>
+      <li><span class='object_link'><a href="Util.html#install_methods_in_model-class_method" title="Anchormodel::Util.install_methods_in_model (method)">Full parameter documentation.</a></span></li>
     
   </ul>
 
@@ -205,12 +333,12 @@
       <pre class="lines">
 
 
-14
-15
-16</pre>
+34
+35
+36</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/model_mixin.rb', line 14</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/model_mixin.rb', line 34</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_belongs_to_anchormodel'>belongs_to_anchormodel</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Util.html" title="Anchormodel::Util (module)">Util</a></span></span><span class='period'>.</span><span class='id identifier rubyid_install_methods_in_model'><span class='object_link'><a href="Util.html#install_methods_in_model-class_method" title="Anchormodel::Util.install_methods_in_model (method)">install_methods_in_model</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
@@ -232,18 +360,40 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Creates an attribute linking to an array of Anchormodels. The attribute should be present in the DB and the column should be named the singular of <code>attribute_name</code>.</p>
+<p>Declares a collection-valued anchormodel attribute.</p>
+
+<p>The DB table must have a String column with the same name as <code>attribute_name</code>. Multiple keys are stored as a comma-separated string. Reading the attribute returns a <code>Set</code> of Anchormodel instances. <code>optional: true</code> is forced (an empty collection is a valid value).</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Basic usage</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='kw'>class</span> <span class='const'>User</span> <span class='op'>&lt;</span> <span class='const'>ApplicationRecord</span>
+  <span class='id identifier rubyid_belongs_to_anchormodels'>belongs_to_anchormodels</span> <span class='symbol'>:animals</span>
+<span class='kw'>end</span>
+
+<span class='id identifier rubyid_user'>user</span> <span class='op'>=</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_create!'>create!</span><span class='lparen'>(</span><span class='label'>animals:</span> <span class='qsymbols_beg'>%i[</span><span class='tstring_content'>cat</span><span class='words_sep'> </span><span class='tstring_content'>dog</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_animals'>animals</span>                  <span class='comment'># =&gt; #&lt;Set: {#&lt;Animal&lt;cat&gt;&gt;, #&lt;Animal&lt;dog&gt;&gt;}&gt;
+</span><span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_cat?'>cat?</span>                     <span class='comment'># =&gt; true
+</span><span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_animals'>animals</span> <span class='op'>&lt;&lt;</span> <span class='symbol'>:horse</span>
+<span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_with_any_animals'>with_any_animals</span><span class='lparen'>(</span><span class='symbol'>:cat</span><span class='comma'>,</span> <span class='symbol'>:horse</span><span class='rparen'>)</span> <span class='comment'># =&gt; relation matching the user above</span></code></pre>
+    
+  </div>
+
 
   <p class="tag_title">See Also:</p>
   <ul class="see">
     
-      <li>Parameters</li>
+      <li><span class='object_link'><a href="Util.html#install_methods_in_model-class_method" title="Anchormodel::Util.install_methods_in_model (method)">Full parameter documentation.</a></span></li>
     
   </ul>
 
@@ -253,12 +403,12 @@
       <pre class="lines">
 
 
-21
-22
-23</pre>
+56
+57
+58</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/model_mixin.rb', line 21</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/model_mixin.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_belongs_to_anchormodels'>belongs_to_anchormodels</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Util.html" title="Anchormodel::Util (module)">Util</a></span></span><span class='period'>.</span><span class='id identifier rubyid_install_methods_in_model'><span class='object_link'><a href="Util.html#install_methods_in_model-class_method" title="Anchormodel::Util.install_methods_in_model (method)">install_methods_in_model</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='comma'>,</span> <span class='label'>multiple:</span> <span class='kw'>true</span><span class='rparen'>)</span>
@@ -273,7 +423,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed May 13 11:46:17 2026 by
+  Generated on Wed May 13 15:48:24 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.3.5).
 </div>

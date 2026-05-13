@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Module: Anchormodel::SimpleFormInputs
+  Exception: Anchormodel::InvalidKey
   
     &mdash; Documentation by YARD 0.9.28
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" />
 
 <script type="text/javascript">
-  pathId = "Anchormodel::SimpleFormInputs";
+  pathId = "Anchormodel::InvalidKey";
   relpath = '../';
 </script>
 
@@ -36,10 +36,10 @@
       <div id="header">
         <div id="menu">
   
-    <a href="../_index.html">Index (S)</a> &raquo;
+    <a href="../_index.html">Index (I)</a> &raquo;
     <span class='title'><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></span>
      &raquo; 
-    <span class="title">SimpleFormInputs</span>
+    <span class="title">InvalidKey</span>
   
 </div>
 
@@ -59,12 +59,30 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Module: Anchormodel::SimpleFormInputs
+      <div id="content"><h1>Exception: Anchormodel::InvalidKey
   
   
   
 </h1>
 <div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">RuntimeError</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">RuntimeError</li>
+          
+            <li class="next">Anchormodel::InvalidKey</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
   
 
   
@@ -78,29 +96,33 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/anchormodel/simple_form_inputs/helpers/anchormodel_inputs_common.rb</dd>
+    <dd>lib/anchormodel.rb</dd>
   </dl>
   
 </div>
 
-<h2>Defined Under Namespace</h2>
-<p class="children">
-  
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
     
-      <strong class="modules">Modules:</strong> <span class='object_link'><a href="SimpleFormInputs/Helpers.html" title="Anchormodel::SimpleFormInputs::Helpers (module)">Helpers</a></span>
-    
+<p>Raised when an anchormodel key is unknown to its class — i.e. no <code>new :that_key</code> call was made on the subclass.</p>
+
+<p>Inherits from <code>RuntimeError</code> so existing <code>rescue RuntimeError</code> blocks remain compatible while allowing the narrower <code>rescue Anchormodel::InvalidKey</code>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
   
-    
+
+</div>
+
+
+
+
+
+
+
   
-</p>
-
-
-
-
-
-
-
-
 
 </div>
 

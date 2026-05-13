@@ -104,6 +104,10 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
+<p>ActiveModel type adapter for single-value anchormodel attributes.</p>
+
+<p>Translates between the in-memory Ruby form (an <code>Anchormodel</code> instance or <code>nil</code>) and the on-disk form (a String key in the DB column). Registered with AR via <code>model_class.attribute(name, ActiveModelTypeValueSingle.new(attribute))</code> by <span class='object_link'><a href="Util.html#install_methods_in_model-class_method" title="Anchormodel::Util.install_methods_in_model (method)">Util.install_methods_in_model</a></span>.</p>
+
 
   </div>
 </div>
@@ -113,7 +117,7 @@
   <p class="tag_title">See Also:</p>
   <ul class="see">
     
-      <li><a href="https://www.rubydoc.info/docs/rails/ActiveModel/Type/Value" target="_parent" title="https://www.rubydoc.info/docs/rails/ActiveModel/Type/Value">https://www.rubydoc.info/docs/rails/ActiveModel/Type/Value</a></li>
+      <li><a href="https://www.rubydoc.info/docs/rails/ActiveModel/Type/Value" target="_parent" title="Rails type interface">Rails type interface</a></li>
     
   </ul>
 
@@ -150,7 +154,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute attribute.</p>
+</div></span>
   
 </li>
 
@@ -171,7 +177,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#cast-instance_method" title="#cast (instance method)">#<strong>cast</strong>(value)  &#x21d2; Object </a>
+      <a href="#cast-instance_method" title="#cast (instance method)">#<strong>cast</strong>(value)  &#x21d2; Anchormodel<sup>?</sup> </a>
     
 
     
@@ -186,7 +192,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>This converts DB or input to an Anchormodel instance.</p>
+<p>Coerces an input value into an Anchormodel instance (or nil).</p>
 </div></span>
   
 </li>
@@ -206,10 +212,12 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Used by AR’s dirty tracking to detect in-place mutation.</p>
+</div></span>
   
 </li>
 
@@ -257,7 +265,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Reports whether <code>value</code> is a shape that <span class='object_link'><a href="#serialize-instance_method" title="Anchormodel::ActiveModelTypeValueSingle#serialize (method)">#serialize</a></span> would accept.</p>
+</div></span>
   
 </li>
 
@@ -265,7 +275,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#serialize-instance_method" title="#serialize (instance method)">#<strong>serialize</strong>(value)  &#x21d2; Object </a>
+      <a href="#serialize-instance_method" title="#serialize (instance method)">#<strong>serialize</strong>(value)  &#x21d2; String<sup>?</sup> </a>
     
 
     
@@ -280,7 +290,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>This converts an Anchormodel instance to string for DB.</p>
+<p>Converts an Anchormodel-shaped value into the String key stored in the DB.</p>
 </div></span>
   
 </li>
@@ -289,7 +299,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#type-instance_method" title="#type (instance method)">#<strong>type</strong>  &#x21d2; Object </a>
+      <a href="#type-instance_method" title="#type (instance method)">#<strong>type</strong>  &#x21d2; Symbol </a>
     
 
     
@@ -303,7 +313,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p><code>:anchormodel</code> — the type identifier.</p>
+</div></span>
   
 </li>
 
@@ -333,7 +345,22 @@
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>attribute</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Attribute.html" title="Anchormodel::Attribute (class)">Anchormodel::Attribute</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -341,13 +368,13 @@
       <pre class="lines">
 
 
-5
-6
-7
-8</pre>
+15
+16
+17
+18</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 5</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 15</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_attribute'>attribute</span><span class='rparen'>)</span>
   <span class='kw'>super</span><span class='lparen'>(</span><span class='rparen'>)</span>
@@ -377,6 +404,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns the value of attribute attribute.</p>
+
 
   </div>
 </div>
@@ -389,12 +418,12 @@
       <pre class="lines">
 
 
-3
-4
-5</pre>
+12
+13
+14</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 3</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 12</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_attribute'>attribute</span>
   <span class='ivar'>@attribute</span>
@@ -414,7 +443,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="cast-instance_method">
   
-    #<strong>cast</strong>(value)  &#x21d2; <tt>Object</tt> 
+    #<strong>cast</strong>(value)  &#x21d2; <tt><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></tt><sup>?</sup> 
   
 
   
@@ -423,13 +452,69 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>This converts DB or input to an Anchormodel instance</p>
+<p>Coerces an input value into an Anchormodel instance (or nil). Used by Rails when reading from the DB, when assigning via mass-assignment, and for dirty-tracking.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>DB value, user input, or already-cast instance.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The matching Anchormodel instance, or <code>nil</code> for blank input.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="InvalidKey.html" title="Anchormodel::InvalidKey (class)">Anchormodel::InvalidKey</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if a String/Symbol is not a registered key.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -437,14 +522,14 @@
       <pre class="lines">
 
 
-15
-16
-17
-18
-19</pre>
+31
+32
+33
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 31</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_presence'>presence</span>
@@ -467,7 +552,13 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Used by AR’s dirty tracking to detect in-place mutation.</p>
+
 
   </div>
 </div>
@@ -493,13 +584,13 @@
       <pre class="lines">
 
 
-32
-33
-34
-35</pre>
+60
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 60</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_changed_in_place?'>changed_in_place?</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_old_value'>raw_old_value</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_old_value'>old_value</span> <span class='op'>=</span> <span class='id identifier rubyid_deserialize'>deserialize</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_old_value'>raw_old_value</span><span class='rparen'>)</span>
@@ -522,11 +613,28 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Reports whether <code>value</code> is a shape that <span class='object_link'><a href="#serialize-instance_method" title="Anchormodel::ActiveModelTypeValueSingle#serialize (method)">#serialize</a></span> would accept. Used by AR’s <code>Arel::Nodes::HomogeneousIn</code> to gate which array elements get bound into IN clauses. Returns true for any String/Symbol/<code>nil</code>/Anchormodel instance — actual key validation is deferred to <span class='object_link'><a href="#serialize-instance_method" title="Anchormodel::ActiveModelTypeValueSingle#serialize (method)">#serialize</a></span>.</p>
+
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
 <p class="tag_title">Returns:</p>
 <ul class="return">
   
@@ -547,16 +655,14 @@
       <pre class="lines">
 
 
-27
-28
-29
-30</pre>
+54
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 27</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 54</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_serializable?'>serializable?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_all?'>all?</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_scalar_serializable?'>scalar_serializable?</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span> <span class='rbrace'>}</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_scalar_serializable?'>scalar_serializable?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -567,7 +673,7 @@
       <div class="method_details ">
   <h3 class="signature " id="serialize-instance_method">
   
-    #<strong>serialize</strong>(value)  &#x21d2; <tt>Object</tt> 
+    #<strong>serialize</strong>(value)  &#x21d2; <tt>String</tt><sup>?</sup> 
   
 
   
@@ -576,13 +682,78 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>This converts an Anchormodel instance to string for DB</p>
+<p>Converts an Anchormodel-shaped value into the String key stored in the DB.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt><span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span></tt>, <tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The key as a String, or <code>nil</code> for blank input.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="InvalidKey.html" title="Anchormodel::InvalidKey (class)">Anchormodel::InvalidKey</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>for unknown String/Symbol keys.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RuntimeError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>for any other input type (e.g. Array, Integer).</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -590,16 +761,14 @@
       <pre class="lines">
 
 
-22
-23
-24
-25</pre>
+43
+44
+45</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 43</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_serialize'>serialize</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_serialize_scalar'>serialize_scalar</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span> <span class='rbrace'>}</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_serialize_scalar'>serialize_scalar</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -610,7 +779,7 @@
       <div class="method_details ">
   <h3 class="signature " id="type-instance_method">
   
-    #<strong>type</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>type</strong>  &#x21d2; <tt>Symbol</tt> 
   
 
   
@@ -619,11 +788,31 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns <code>:anchormodel</code> — the type identifier.</p>
+
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p><code>:anchormodel</code> — the type identifier.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -631,12 +820,12 @@
       <pre class="lines">
 
 
-10
-11
-12</pre>
+21
+22
+23</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 10</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_single.rb', line 21</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
   <span class='symbol'>:anchormodel</span>
@@ -651,7 +840,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed May 13 11:46:17 2026 by
+  Generated on Wed May 13 15:48:25 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.3.5).
 </div>

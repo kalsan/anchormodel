@@ -88,9 +88,13 @@
   
 </div>
 
-<div class="docstring">
+<h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
+<p>Shared logic for all anchormodel SimpleForm inputs (<span class='object_link'><a href="../../../AnchormodelInput.html" title="AnchormodelInput (class)">AnchormodelInput</a></span>, <span class='object_link'><a href="../../../AnchormodelRadioButtonsInput.html" title="AnchormodelRadioButtonsInput (class)">AnchormodelRadioButtonsInput</a></span>, <span class='object_link'><a href="../../../AnchormodelCheckBoxesInput.html" title="AnchormodelCheckBoxesInput (class)">AnchormodelCheckBoxesInput</a></span>). Resolves the anchormodel class from the bound object, builds the collection of label/key tuples, and computes the currently-selected key(s).</p>
+
+<p>Callers can supply a custom <code>:collection</code> (either an array of anchormodels or an array of <code>[label, key]</code> tuples) to override the default of <code>am_class.all</code>. Callers without a bound <code>object</code> must pass <code>:anchormodel_attribute</code> explicitly.</p>
+
 
   </div>
 </div>
@@ -115,7 +119,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#input-instance_method" title="#input (instance method)">#<strong>input</strong>(wrapper_options = nil)  &#x21d2; Object </a>
+      <a href="#input-instance_method" title="#input (instance method)">#<strong>input</strong>(wrapper_options = nil)  &#x21d2; String </a>
     
 
     
@@ -129,7 +133,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Resolves the anchormodel attribute, builds the collection, and delegates to the underlying SimpleForm input class via <code>super</code>.</p>
+</div></span>
   
 </li>
 
@@ -146,7 +152,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="input-instance_method">
   
-    #<strong>input</strong>(wrapper_options = nil)  &#x21d2; <tt>Object</tt> 
+    #<strong>input</strong>(wrapper_options = nil)  &#x21d2; <tt>String</tt> 
   
 
   
@@ -155,11 +161,66 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Resolves the anchormodel attribute, builds the collection, and delegates to the underlying SimpleForm input class via <code>super</code>.</p>
+
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>wrapper_options</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>, <tt>nil</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Rendered HTML.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RuntimeError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if the bound object does not include <span class='object_link'><a href="../../ModelMixin.html" title="Anchormodel::ModelMixin (module)">ModelMixin</a></span>, or if the attribute does not look like an anchormodel attribute.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -167,20 +228,6 @@
       <pre class="lines">
 
 
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
 19
 20
 21
@@ -221,10 +268,24 @@
 56
 57
 58
-59</pre>
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/simple_form_inputs/helpers/anchormodel_inputs_common.rb', line 5</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/simple_form_inputs/helpers/anchormodel_inputs_common.rb', line 19</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_input'>input</span><span class='lparen'>(</span><span class='id identifier rubyid_wrapper_options'>wrapper_options</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
@@ -291,7 +352,7 @@ Affected object: </span><span class='embexpr_beg'>#{</span><span class='id ident
 </div>
 
       <div id="footer">
-  Generated on Wed May 13 11:46:17 2026 by
+  Generated on Wed May 13 15:48:24 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.3.5).
 </div>

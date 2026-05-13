@@ -103,14 +103,25 @@
   
 </div>
 
-<div class="docstring">
+<h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
+<p>ActiveModel type adapter for collection-valued anchormodel attributes (<code>belongs_to_anchormodels</code>).</p>
+
+<p>Translates between an in-memory <code>Set&lt;Anchormodel&gt;</code> and a CSV <code>String</code> stored in a single DB column. Inherits scalar handling from <span class='object_link'><a href="ActiveModelTypeValueSingle.html" title="Anchormodel::ActiveModelTypeValueSingle (class)">ActiveModelTypeValueSingle</a></span> and overrides the collection-aware methods.</p>
+
 
   </div>
 </div>
 <div class="tags">
   
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="https://www.rubydoc.info/docs/rails/ActiveModel/Type/Value" target="_parent" title="Rails type interface">Rails type interface</a></li>
+    
+  </ul>
 
 </div>
 
@@ -135,7 +146,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#cast-instance_method" title="#cast (instance method)">#<strong>cast</strong>(values)  &#x21d2; Object </a>
+      <a href="#cast-instance_method" title="#cast (instance method)">#<strong>cast</strong>(values)  &#x21d2; Set&lt;Anchormodel&gt; </a>
     
 
     
@@ -150,7 +161,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>This converts DB or input to an Anchormodel instance.</p>
+<p>Splits the stored CSV and casts each entry into an Anchormodel instance.</p>
 </div></span>
   
 </li>
@@ -173,7 +184,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Reports whether <span class='object_link'><a href="#serialize-instance_method" title="Anchormodel::ActiveModelTypeValueMulti#serialize (method)">#serialize</a></span> would accept <code>values</code>.</p>
+</div></span>
   
 </li>
 
@@ -181,7 +194,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#serialize-instance_method" title="#serialize (instance method)">#<strong>serialize</strong>(values)  &#x21d2; Object </a>
+      <a href="#serialize-instance_method" title="#serialize (instance method)">#<strong>serialize</strong>(values)  &#x21d2; String </a>
     
 
     
@@ -196,7 +209,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>This converts an Anchormodel instance to string for DB.</p>
+<p>Serializes a Set/Array of anchormodel-shaped values into a CSV <code>String</code> for the DB.</p>
 </div></span>
   
 </li>
@@ -232,7 +245,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="cast-instance_method">
   
-    #<strong>cast</strong>(values)  &#x21d2; <tt>Object</tt> 
+    #<strong>cast</strong>(values)  &#x21d2; <tt>Set&lt;<span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span>&gt;</tt> 
   
 
   
@@ -241,13 +254,69 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>This converts DB or input to an Anchormodel instance</p>
+<p>Splits the stored CSV and casts each entry into an Anchormodel instance.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>values</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>CSV string from the DB, or <code>nil</code> (NULL).</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Set&lt;<span class='object_link'><a href="../Anchormodel.html" title="Anchormodel (class)">Anchormodel</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set of Anchormodel instances. Empty when <code>values</code> is nil or <code>&quot;&quot;</code>.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="InvalidKey.html" title="Anchormodel::InvalidKey (class)">Anchormodel::InvalidKey</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if any CSV entry is not a registered key.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -255,14 +324,16 @@
       <pre class="lines">
 
 
-3
-4
-5</pre>
+14
+15
+16
+17</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_multi.rb', line 3</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_multi.rb', line 14</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='const'>Set</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>if</span> <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_to_set'>to_set</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -282,11 +353,28 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Reports whether <span class='object_link'><a href="#serialize-instance_method" title="Anchormodel::ActiveModelTypeValueMulti#serialize (method)">#serialize</a></span> would accept <code>values</code>. Returns strict Boolean.</p>
+
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>values</span>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
 <p class="tag_title">Returns:</p>
 <ul class="return">
   
@@ -307,26 +395,30 @@
       <pre class="lines">
 
 
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30</pre>
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_multi.rb', line 21</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_multi.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_serializable?'>serializable?</span><span class='lparen'>(</span><span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>case</span> <span class='id identifier rubyid_values'>values</span>
          <span class='kw'>when</span> <span class='const'>Enumerable</span>
-           <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+           <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_all?'>all?</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
          <span class='kw'>when</span> <span class='const'>String</span>
-           <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span>
+           <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_all?'>all?</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+         <span class='kw'>when</span> <span class='kw'>nil</span>
+           <span class='kw'>true</span>
          <span class='kw'>else</span>
            <span class='kw'>false</span>
          <span class='kw'>end</span>
@@ -339,7 +431,7 @@
       <div class="method_details ">
   <h3 class="signature " id="serialize-instance_method">
   
-    #<strong>serialize</strong>(values)  &#x21d2; <tt>Object</tt> 
+    #<strong>serialize</strong>(values)  &#x21d2; <tt>String</tt> 
   
 
   
@@ -348,13 +440,83 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>This converts an Anchormodel instance to string for DB</p>
+<p>Serializes a Set/Array of anchormodel-shaped values into a CSV <code>String</code> for the DB. Validates every entry and raises immediately on invalid keys (rather than deferring the error to the next read).</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>values</span>
+      
+      
+        <span class='type'>(<tt>Enumerable</tt>, <tt>String</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Collection of anchormodel-shaped values, a pre-formed CSV <code>String</code>, or <code>nil</code>.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>CSV of validated keys, or <code>&quot;&quot;</code> for nil / empty collection.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="InvalidKey.html" title="Anchormodel::InvalidKey (class)">Anchormodel::InvalidKey</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if any element is an unknown key.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RuntimeError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if <code>values</code> is not an Enumerable, String, or <code>nil</code>.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -362,28 +524,28 @@
       <pre class="lines">
 
 
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19</pre>
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_multi.rb', line 8</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/active_model_type_value_multi.rb', line 28</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_serialize'>serialize</span><span class='lparen'>(</span><span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>case</span> <span class='id identifier rubyid_values'>values</span>
          <span class='kw'>when</span> <span class='const'>Enumerable</span>
            <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
          <span class='kw'>when</span> <span class='const'>String</span>
-           <span class='id identifier rubyid_values'>values</span>
+           <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
          <span class='kw'>when</span> <span class='kw'>nil</span>
            <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
          <span class='kw'>else</span>
@@ -400,7 +562,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed May 13 11:46:17 2026 by
+  Generated on Wed May 13 15:48:25 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.3.5).
 </div>

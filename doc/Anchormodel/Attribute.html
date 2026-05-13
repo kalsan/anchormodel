@@ -102,7 +102,9 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>This class holds all information related to a Rails model pointing to an Anchormodel. It is instanciated when ModelMixin#belongs_to_anchormodel is used.</p>
+<p>Metadata about an anchormodel attribute installed on a Rails model.</p>
+
+<p>One instance is created per call to ModelMixin#belongs_to_anchormodel or ModelMixin#belongs_to_anchormodels and stored in the model class’s <code>anchormodel_attributes</code> hash. Used internally by the AR type casters and by SimpleForm inputs to discover what an attribute points to.</p>
 
 
   </div>
@@ -139,7 +141,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute anchormodel_class.</p>
+</div></span>
   
 </li>
 
@@ -166,7 +170,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute attribute_name.</p>
+</div></span>
   
 </li>
 
@@ -193,7 +199,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute optional.</p>
+</div></span>
   
 </li>
 
@@ -254,7 +262,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>True for <code>belongs_to_anchormodels</code> (collection), false for <code>belongs_to_anchormodel</code> (single).</p>
+</div></span>
   
 </li>
 
@@ -291,13 +301,13 @@
         <span class='name'>model_class</span>
       
       
-        <span class='type'>(<tt>ActiveRecord::Base</tt>)</span>
+        <span class='type'>(<tt>Class</tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>The Rails model where ModelMixin#belongs_to_anchormodel is used</p>
+<p>The ActiveRecord model class on which ModelMixin#belongs_to_anchormodel is called.</p>
 </div>
       
     </li>
@@ -313,7 +323,7 @@
       
         &mdash;
         <div class='inline'>
-<p>The name and database column of the attribute</p>
+<p>The model attribute / DB column name.</p>
 </div>
       
     </li>
@@ -323,7 +333,7 @@
         <span class='name'>anchormodel_class</span>
       
       
-        <span class='type'>(<tt>Class</tt>)</span>
+        <span class='type'>(<tt>Class</tt>, <tt>nil</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>nil</tt>)</em>
@@ -331,7 +341,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Class of the Anchormodel (omit if attribute <code>:foo_bar</code> holds an <code>FooBar</code>)</p>
+<p>The Anchormodel subclass. Omit if attribute <code>:foo_bar</code> references <code>FooBar</code>.</p>
 </div>
       
     </li>
@@ -349,7 +359,7 @@
       
         &mdash;
         <div class='inline'>
-<p>If true, a presence validation is added to the model.</p>
+<p>If true, no presence validation is added.</p>
 </div>
       
     </li>
@@ -367,7 +377,7 @@
       
         &mdash;
         <div class='inline'>
-<p>If true, this attribute holds multiple anchormodels.</p>
+<p>If true, this attribute holds a Set of anchormodels (CSV in column).</p>
 </div>
       
     </li>
@@ -381,16 +391,16 @@
       <pre class="lines">
 
 
-14
-15
-16
-17
-18
-19
-20</pre>
+25
+26
+27
+28
+29
+30
+31</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 14</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 25</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='comma'>,</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span><span class='comma'>,</span> <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_optional'>optional</span> <span class='op'>=</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='id identifier rubyid_multiple'>multiple</span> <span class='op'>=</span> <span class='kw'>false</span><span class='rparen'>)</span>
   <span class='ivar'>@model_class</span> <span class='op'>=</span> <span class='id identifier rubyid_model_class'>model_class</span>
@@ -423,6 +433,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns the value of attribute anchormodel_class.</p>
+
 
   </div>
 </div>
@@ -435,12 +447,12 @@
       <pre class="lines">
 
 
-6
-7
-8</pre>
+14
+15
+16</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 6</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 14</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_anchormodel_class'>anchormodel_class</span>
   <span class='ivar'>@anchormodel_class</span>
@@ -464,6 +476,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns the value of attribute attribute_name.</p>
+
 
   </div>
 </div>
@@ -476,12 +490,12 @@
       <pre class="lines">
 
 
-5
-6
-7</pre>
+10
+11
+12</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 5</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 10</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_attribute_name'>attribute_name</span>
   <span class='ivar'>@attribute_name</span>
@@ -505,6 +519,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns the value of attribute optional.</p>
+
 
   </div>
 </div>
@@ -517,12 +533,12 @@
       <pre class="lines">
 
 
-7
-8
-9</pre>
+18
+19
+20</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 7</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_optional'>optional</span>
   <span class='ivar'>@optional</span>
@@ -551,6 +567,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns true for <code>belongs_to_anchormodels</code> (collection), false for <code>belongs_to_anchormodel</code> (single).</p>
+
 
   </div>
 </div>
@@ -566,6 +584,11 @@
       
       
       
+        &mdash;
+        <div class='inline'>
+<p>true for <code>belongs_to_anchormodels</code> (collection), false for <code>belongs_to_anchormodel</code> (single).</p>
+</div>
+      
     </li>
   
 </ul>
@@ -576,12 +599,12 @@
       <pre class="lines">
 
 
-22
-23
-24</pre>
+34
+35
+36</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'lib/anchormodel/attribute.rb', line 34</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_multiple?'>multiple?</span>
   <span class='ivar'>@multiple</span>
@@ -596,7 +619,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed May 13 11:46:17 2026 by
+  Generated on Wed May 13 15:48:24 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.3.5).
 </div>
