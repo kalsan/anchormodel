@@ -86,6 +86,45 @@ class UserTest < Minitest::Test
     assert_equal 0, User.guest.count
   end
 
+  # Regression: `where(anchormodel_col: %w[a b])` used to collapse to `IN (NULL)`
+  # because Single#serialize lacked Array handling. See memory `array-where-collapses-to-null`.
+  def test_where_with_array_of_keys
+    User.create!(role: :admin, locale: :en)
+    User.create!(role: :moderator, locale: :en)
+    User.create!(role: :guest, locale: :en)
+
+    sql = User.where(role: %w[admin moderator]).to_sql
+    assert_match(/admin/, sql)
+    assert_match(/moderator/, sql)
+    refute_match(/IN \(NULL\)/i, sql) # rubocop:disable Rails/RefuteMethods
+
+    assert_equal 2, User.where(role: %w[admin moderator]).count
+    assert_equal 2, User.where(role: %i[admin moderator]).count
+    assert_equal(
+      2,
+      User.where(role: [Role.find(:admin), Role.find(:moderator)]).count
+    )
+    assert_equal 1, User.where.not(role: %w[admin moderator]).count
+  end
+
+  def test_where_with_array_of_invalid_keys_raises
+    assert_raises(RuntimeError) { User.where(role: %w[admin nope]).to_a }
+  end
+
+  # Direct probe on `serializable?` — guards against re-introducing the inverted
+  # `exclude?` logic that silently dropped valid keys from `HomogeneousIn` binds.
+  def test_serializable_predicate
+    type = User.type_for_attribute(:role)
+    assert type.serializable?('admin')
+    assert type.serializable?(:admin)
+    assert type.serializable?(Role.find(:admin))
+    assert type.serializable?(nil)
+    assert type.serializable?(%w[admin guest])
+    assert type.serializable?([:admin, Role.find(:guest)])
+    refute type.serializable?(42) # rubocop:disable Rails/RefuteMethods
+    refute type.serializable?([42]) # rubocop:disable Rails/RefuteMethods
+  end
+
   def test_model_readers_writers_with_different_class_name
     pia = User.new(locale: :en)
     pia.de!

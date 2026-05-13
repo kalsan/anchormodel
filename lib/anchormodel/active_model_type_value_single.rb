@@ -20,6 +20,23 @@ class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
 
   # This converts an Anchormodel instance to string for DB
   def serialize(value)
+    return value.map { |v| serialize_scalar(v) } if value.is_a?(Array)
+    serialize_scalar(value)
+  end
+
+  def serializable?(value)
+    return value.all? { |v| scalar_serializable?(v) } if value.is_a?(Array)
+    scalar_serializable?(value)
+  end
+
+  def changed_in_place?(raw_old_value, value)
+    old_value = deserialize(raw_old_value)
+    old_value != value
+  end
+
+  private
+
+  def serialize_scalar(value)
     value = value.presence
     return case value
            when Symbol, String
@@ -36,19 +53,12 @@ class Anchormodel::ActiveModelTypeValueSingle < ActiveModel::Type::Value
            end
   end
 
-  def serializable?(value)
+  def scalar_serializable?(value)
     return case value
-           when Symbol, String
-             @attribute.anchormodel_class.valid_keys.exclude?(value.to_sym)
-           when nil, @attribute.anchormodel_class
+           when Symbol, String, nil, @attribute.anchormodel_class
              true
            else
              false
            end
-  end
-
-  def changed_in_place?(raw_old_value, value)
-    old_value = deserialize(raw_old_value)
-    old_value != value
   end
 end

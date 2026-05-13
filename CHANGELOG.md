@@ -1,3 +1,8 @@
+# unreleased
+
+- Fix `Model.where(anchormodel_col: array)` collapsing to `IN (NULL)` and matching zero rows
+- Fix inverted `serializable?` logic on single-value anchormodel attributes
+
 # 0.3.0
 
 - Fix typos in doc (thank you Josua!)
