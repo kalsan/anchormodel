@@ -128,6 +128,14 @@ class UserTest < Minitest::Test
   # Multi#serializable? must return strict Boolean (true/false), not a truthy String/Array.
   # Old impl: `values.map { super }.compact.join(',')` etc — returned non-Boolean and was
   # always truthy regardless of validity.
+  # Multi#cast must tolerate nil — e.g. NULL stored in DB from a migration that did not backfill,
+  # or column with no default. Also covers `deserialize(nil)` which falls back to `cast`.
+  def test_multi_cast_nil_returns_empty_set
+    type = User.type_for_attribute(:animals)
+    assert_equal Set.new, type.cast(nil)
+    assert_equal Set.new, type.deserialize(nil)
+  end
+
   def test_multi_serializable_predicate_returns_boolean
     type = User.type_for_attribute(:animals)
     assert_equal true,  type.serializable?(%w[cat dog])
