@@ -1,3 +1,7 @@
+# unreleased
+
+- Develop and test on Ruby 4.0.10 (was 3.4.9), with an updated development bundle (Rails 8.1.4.1, minitest 6.1, sqlite3 2.10) locked by Bundler 4.0.20. The development dependencies are now lower bounds (e.g. `minitest >= 5.25`, `sqlite3 >= 2.1`) instead of patch-level pins, which no longer installed on Ruby 4.0. The gem itself still requires Ruby 3.0 or newer.
+
 # 0.4.0
 
 - Fix `Multi#serializable?` returning non-Boolean values (CSV String / Array) and rejecting `nil`

@@ -16,19 +16,19 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/kalsan/anchormodel".freeze
   s.licenses = ["LGPL-3.0-or-later".freeze]
   s.required_ruby_version = Gem::Requirement.new(">= 3.0.0".freeze)
-  s.rubygems_version = "4.0.11".freeze
+  s.rubygems_version = "4.1.1".freeze
   s.summary = "Bringing object-oriented programming to Rails enums".freeze
 
   s.specification_version = 4
 
-  s.add_runtime_dependency(%q<rails>.freeze, [">= 7.0".freeze])
-  s.add_development_dependency(%q<rake>.freeze, ["~> 13.0.6".freeze])
-  s.add_development_dependency(%q<pry>.freeze, ["~> 0.14.1".freeze])
-  s.add_development_dependency(%q<rubocop>.freeze, ["~> 1.43.0".freeze])
-  s.add_development_dependency(%q<rubocop-rails>.freeze, ["~> 2.17.4".freeze])
-  s.add_development_dependency(%q<yard>.freeze, ["~> 0.9.28".freeze])
-  s.add_development_dependency(%q<yard-activesupport-concern>.freeze, ["~> 0.0.1".freeze])
-  s.add_development_dependency(%q<minitest>.freeze, ["~> 5.17.0".freeze])
-  s.add_development_dependency(%q<minitest-reporters>.freeze, ["~> 1.5.0".freeze])
-  s.add_development_dependency(%q<sqlite3>.freeze, ["~> 1.6.0".freeze])
+  s.add_runtime_dependency("rails".freeze, [">= 7.0".freeze])
+  s.add_development_dependency("rake".freeze, [">= 13.0".freeze])
+  s.add_development_dependency("pry".freeze, [">= 0.14".freeze])
+  s.add_development_dependency("rubocop".freeze, [">= 1.43".freeze])
+  s.add_development_dependency("rubocop-rails".freeze, [">= 2.17".freeze])
+  s.add_development_dependency("yard".freeze, [">= 0.9.28".freeze])
+  s.add_development_dependency("yard-activesupport-concern".freeze, ["~> 0.0.1".freeze])
+  s.add_development_dependency("minitest".freeze, [">= 5.25".freeze])
+  s.add_development_dependency("minitest-reporters".freeze, [">= 1.5".freeze])
+  s.add_development_dependency("sqlite3".freeze, [">= 2.1".freeze])
 end
